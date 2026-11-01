@@ -53,6 +53,10 @@ a:hover{text-decoration:underline}
 #hud .head{display:flex;gap:12px;align-items:center}
 #hud .avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--w16),0 0 24px rgba(143,182,255,.35);background:#223}
 #hud .kicker{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600}
+#hud .kicker.home{cursor:pointer;display:inline-flex;align-items:center;gap:5px;margin-left:-5px;padding:2px 8px 2px 5px;border-radius:999px;transition:background .15s}
+#hud .kicker.home::before{content:'‹';font-size:17px;line-height:1;letter-spacing:0;transform:translateY(-1.5px)}
+#hud .kicker.home:hover,#hud .kicker.home:focus-visible{background:rgba(255,255,255,.1);outline:none}
+#hud .kicker .beta{margin-left:4px;padding:1px 6px;border-radius:999px;border:1px solid currentColor;font-size:8.5px;letter-spacing:.14em;opacity:.8}
 #hud h1{font-size:19px;font-weight:650;letter-spacing:.01em;line-height:1.15;margin-top:2px}
 #hud .bio{font-size:12px;color:var(--muted);margin-top:1px}
 #hud .toggle{margin-left:auto;align-self:flex-start;color:var(--muted);width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
@@ -480,6 +484,15 @@ body.edit-conts #map{cursor:move}
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Klangkarte">
 <link rel="apple-touch-icon" href="icon-180.png">
+<script>/* Einstellungen der Beta (eine Stelle fuer alles, was sich vor dem Veroeffentlichen aendert).
+   beta     : zeigt die "Beta"-Marke in Startseite und Karte.
+   feedback : Link zum Feedback-Formular (Google Forms, Tally, ...). Ein Link fuer beide Sprachen oder { de: '...', en: '...' }:
+              dann oeffnet die Karte das Formular in der gerade gewaehlten Sprache. Leer = der Knopf bleibt unsichtbar.
+   donate   : Link zur Spendenseite (Ko-fi, Buy Me a Coffee, PayPal.me, ...), gleiche Schreibweisen. Leer = der Knopf bleibt unsichtbar.
+   betaDate : Datum des geplanten Beta-Starts (nur zur Anzeige, ISO-Format).
+   Nach einer Aenderung: bash build/rebuild.sh (Handy-App/eigene Karte) bzw. python produkt/build_product.py (Web-Seite), dann hochladen. */
+window.__KK_CFG__ = { beta: true, feedback: { de: 'https://forms.gle/NTLa8HdU3VVyVPB2A', en: 'https://forms.gle/PPHFLRUQ33v95NTx8' }, donate: '', betaDate: '2026-11-08' };
+</script>
 </head>
 <body>
 <div id="loading"><div><div class="t">Klangkarte</div><div class="n">Deine Musik wird kartiert …</div><div class="bar"><i></i></div></div></div>
@@ -520,12 +533,14 @@ body.edit-conts #map{cursor:move}
 </div>
 
 <div id="tools" class="glass">
+  <button class="tbtn hide-m hidden" id="t-homebtn" data-tip="Zur Startseite" aria-label="Zur Startseite"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 9.4L10 3.4l6.8 6M5 8.4v7.6h3.7v-4.4h2.6V16H15V8.4"/></svg></button>
   <button class="tbtn" id="t-search" data-tip="Suchen [/]" aria-label="Suche öffnen"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.8"/><path d="M13 13l4.5 4.5"/></svg></button>
   <button class="tbtn" id="t-menu" data-tip="Menü" aria-label="Menü öffnen" aria-expanded="false"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13"/></svg></button>
   <button class="tbtn hide-m" id="t-drawer" data-tip="Listen &amp; Details" aria-label="Seitenleiste öffnen"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M12 4v12"/></svg></button>
   <button class="tbtn" id="t-settings" data-tip="Einstellungen" aria-label="Einstellungen öffnen"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h7M15 6h1M4 14h1M9 14h7"/><circle cx="13" cy="6" r="2"/><circle cx="7" cy="14" r="2"/></svg></button>
   <button class="tbtn hide-m" id="t-full" data-tip="Vollbild" aria-label="Vollbild"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8V4h4M16 8V4h-4M4 12v4h4M16 12v4h-4"/></svg></button>
   <div id="toolmenu" class="glass">
+    <button class="tm hidden" id="t-home" aria-label="Zur Startseite"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5L6.5 10l5.5 5.5M7 10h9"/></svg><span>Zur Startseite</span></button>
     <button class="tm on" id="t-songs" aria-label="Songs ein- oder ausblenden"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="3.3"/><circle cx="10" cy="10" r="7.4" stroke-dasharray="1.2 3"/></svg><span>Songs (Monde)</span></button>
     <button class="tm on" id="t-links" aria-label="Verbindungen ein- oder ausblenden"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="4" cy="14" r="2"/><circle cx="10" cy="5" r="2"/><circle cx="16" cy="13" r="2"/><path d="M5 12.3l4-5.4M11.4 6.4l3.6 5M6 14.3l8 -.9"/></svg><span>Verbindungslinien</span></button>
     <button class="tm on" id="t-labels" aria-label="Namen ein- oder ausblenden"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h12M4 10h8M4 14h10"/></svg><span>Artist-/Song-Namen</span></button>
@@ -535,11 +550,14 @@ body.edit-conts #map{cursor:move}
     <button class="tm on" id="t-legend" aria-label="Legende ein- oder ausblenden"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M10 9v5M10 6.3v.1"/></svg><span>Legende</span></button>
     <button class="tm" id="t-link" aria-label="Verbindungs-Finder"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="4.5" cy="14.5" r="2.2"/><circle cx="15.5" cy="5.5" r="2.2"/><path d="M6.4 13.3c3-1 2-5 5-6.2"/></svg><span>Verbindungs-Finder</span></button>
     <button class="tm" id="t-live" aria-label="Live-Modus"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="2.2" fill="currentColor"/><path d="M5.6 5.6a6.2 6.2 0 000 8.8M14.4 5.6a6.2 6.2 0 010 8.8M3 3a9.9 9.9 0 000 14M17 3a9.9 9.9 0 010 14"/></svg><span>Live-Modus</span></button>
+    <button class="tm" id="t-sync" aria-label="Neue Streams laden"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 10a6.5 6.5 0 01-11.3 4.4M3.5 10a6.5 6.5 0 0111.3-4.4"/><path d="M14.9 2.6v3.2h-3.2M5.1 17.4v-3.2h3.2"/></svg><span>Neue Streams laden</span></button>
     <button class="tm" id="t-edit" aria-label="Kontinente anpassen"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v16M2 10h16M10 2l-2.2 2.2M10 2l2.2 2.2M10 18l-2.2-2.2M10 18l2.2-2.2M2 10l2.2-2.2M2 10l2.2 2.2M18 10l-2.2-2.2M18 10l-2.2 2.2"/></svg><span>Kontinente anpassen</span></button>
     <button class="tm" id="t-clean" aria-label="Nur die Karte anzeigen"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10s3.2-5.5 8-5.5S18 10 18 10s-3.2 5.5-8 5.5S2 10 2 10z"/><circle cx="10" cy="10" r="2.3"/></svg><span>Nur Karte</span></button>
     <button class="tm" id="t-tour" aria-label="Geführte Tour starten"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9.2L16.5 3.5 11 17l-2.2-5.6z"/></svg><span>Geführte Tour</span></button>
     <button class="tm" id="t-shot" aria-label="Ansicht als PNG speichern"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3.5 7h2.6l1.2-2h5.4l1.2 2h2.6v8.5h-13z"/><circle cx="10" cy="11" r="2.6"/></svg><span>Als Bild speichern</span></button>
     <button class="tm" id="t-pdf" aria-label="Als PDF exportieren"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><path d="M5 2.5h7l3.5 3.5v11.5h-10.5z"/><path d="M12 2.5V6h3.5M7.5 12.5h5M7.5 15h3"/></svg><span>Als PDF exportieren</span></button>
+    <button class="tm hidden" id="t-donate" aria-label="Projekt unterstützen"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16.5s-6-3.7-6-8.2A3.4 3.4 0 0110 6.4a3.4 3.4 0 016 1.9c0 4.5-6 8.2-6 8.2z"/></svg><span>Projekt unterstützen</span></button>
+    <button class="tm hidden" id="t-feedback" aria-label="Feedback geben"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 4.5h13v9h-6.2l-3.6 3v-3H3.5z"/><path d="M7 8h6M7 10.7h3.5"/></svg><span>Feedback geben</span></button>
     <button class="tm" id="t-help" aria-label="Hilfe"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M8 8a2 2 0 114 .3c0 1.4-2 1.5-2 3M10 14.2v.1"/></svg><span>Hilfe</span></button>
     <button class="tm" id="t-drawer2" aria-label="Listen und Details"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M12 4v12"/></svg><span>Listen &amp; Details</span></button>
   </div>
@@ -642,7 +660,7 @@ try { LANG = localStorage.getItem('kk-lang') || (window.__KK_LANG__ ? window.__K
 if (LANG !== 'de' && LANG !== 'en') LANG = 'en';
 const I18N_PAIRS = [
   /* --- Kopf, Suche, Ansicht --- */
-  ['Klangkarte', 'Klangkarte'], ['Interaktive Karte deiner Musik', 'Interactive map of your music'], ['Deine Musik wird kartiert …', 'Mapping your music …'],
+  ['Klangkarte', 'Tunelands'], ['Interaktive Karte deiner Musik', 'Interactive map of your music'], ['Deine Musik wird kartiert …', 'Mapping your music …'],
   ['Ein-/Ausklappen', 'Expand / collapse'], ['Kopfkarte ein- oder ausklappen', 'Expand or collapse profile card'], ['Mehr über dein Hörverhalten', 'More about your listening'], ['Weniger anzeigen', 'Show less'],
   ['Artist, Song, Album oder Genre suchen …', 'Search artist, song, album or genre …'], ['Suche', 'Search'], ['Suche öffnen', 'Open search'], ['Suchen [/]', 'Search [/]'], ['Suchen', 'Search'],
   ['Ansicht', 'View'], ['Karte', 'Map'], ['Rangliste', 'Ranking'], ['Spirale', 'Spiral'], ['Reihen', 'Rows'], ['Objekte', 'Objects'], ['Artists', 'Artists'], ['Songs', 'Songs'], ['Zeigen', 'Show'], ['Alle', 'All'], ['Größe nach', 'Size by'], ['Hörzeit', 'Listening time'], ['Streams', 'Streams'],
@@ -659,7 +677,7 @@ const I18N_PAIRS = [
   ['Nur Karte – mit H oder dem Auge-Symbol zurück', 'Map only – press H or the eye icon to return'],
   /* --- Detailseiten --- */
   ['Details', 'Details'], ['Bestenlisten', 'Top lists'], ['Regionen', 'Regions'], ['Verbindung', 'Connection'], ['Alle Bestenlisten', 'All top lists'], ['▶ Geführte Tour', '▶ Guided tour'],
-  ['Willkommen auf deiner Klangkarte', 'Welcome to your Klangkarte'], ['Klicke einen Artist, Song oder Kontinent an – oder nutze die Suche oben.', 'Click an artist, song or continent – or use the search above.'], ['Meistgehörte Artists', 'Most played artists'], ['Meistgehörte Songs', 'Most played songs'],
+  ['Willkommen auf deiner Klangkarte', 'Welcome to your Tunelands map'], ['Klicke einen Artist, Song oder Kontinent an – oder nutze die Suche oben.', 'Click an artist, song or continent – or use the search above.'], ['Meistgehörte Artists', 'Most played artists'], ['Meistgehörte Songs', 'Most played songs'],
   ['Hörzeit', 'Listening time'], ['gesamt', 'total'], ['im Zeitraum', 'in period'], ['Anteil', 'Share'], ['deiner Hörzeit', 'of your listening time'], ['Verlauf', 'History'], ['Minuten pro Monat', 'Minutes per month'], ['Streams pro Monat', 'Streams per month'],
   ['Erster Stream', 'First stream'], ['· Zuletzt', '· Last'], ['Stärkster Monat:', 'Strongest month:'], ['Gehörte Songs', 'Songs played'], ['Als Feature', 'As featured artist'], ['Alben', 'Albums'], ['Liegt nah bei', 'Sits close to'], ['Tippe „?“ für den Grund', 'Tap “?” for the reason'],
   ['In Spotify öffnen ↗', 'Open in Spotify ↗'], ['In Spotify ↗', 'In Spotify ↗'], ['▶ In Spotify anhören ↗', '▶ Listen in Spotify ↗'], ['Auf Karte zeigen', 'Show on map'], ['Verbindung finden …', 'Find connection …'], ['Keine Songs in diesem Zeitraum.', 'No songs in this period.'],
@@ -696,7 +714,7 @@ const I18N_PAIRS = [
   ['Die ganze Karte als eine riesige Seite: Formen und Schrift sind Vektoren und bleiben in jeder Zoomstufe scharf, Cover sind eingebettet, Artists und Songs führen per Klick zu Spotify, Kontinente findest du in der Gliederung. Es wird der aktuell gewählte Zeitraum mit allen Filtern exportiert.', 'The whole map as one huge page: shapes and text are vectors and stay sharp at any zoom level, covers are embedded, artists and songs link to Spotify, continents are in the outline. The currently chosen period with all filters is exported.'],
   ['Hintergrund', 'Background'], ['Dunkel', 'Dark'], ['Hell (Druck)', 'Light (print)'], ['Cover', 'Covers'], ['Hochauflösend (lädt Bilder)', 'High resolution (loads images)'], ['PDF erstellen', 'Create PDF'],
   /* --- Sonstiges --- */
-  ['Ansicht gespeichert', 'View saved'], ['Vollbild ist hier nicht verfügbar', 'Fullscreen is not available here'], ['Ansicht: Karte', 'View: map'], ['Ansicht: Rangliste in Reihen', 'View: ranking in rows'], ['Ansicht: Spirale', 'View: spiral'], ['Weitere Klänge', 'Other sounds'], ['Kontinente anpassen', 'Adjust continents'], ['Kontinente verschieben', 'Move continents'], ['Lage zurücksetzen', 'Reset positions'], ['Farbschema', 'Color scheme'], ['Original', 'Original'], ['Nach Lage', 'By position'], ['Pastell', 'Pastel'], ['Kräftig', 'Vivid'], ['Farbe und Lage', 'Color and position'], ['Geändert', 'Changed'], ['Farbe ändern', 'Change color'], ['Farben …', 'Colors …'], ['Kontinent verschoben', 'Continent moved'], ['Kontinente getauscht', 'Continents swapped'], ['Karte neu geordnet', 'Map rearranged'], ['Aufräumen', 'Tidy up'], ['Räume auf …', 'Tidying up …'], ['Ziehen: Kontinent', 'Drag: continent'], ['Ziehen: Artist', 'Drag: artist'], ['Zum Kontinent zurückholen', 'Bring back to its continent'], ['Artist zurückgeholt', 'Artist brought back'], ['Ziehe einen Artist an eine neue Stelle', 'Drag an artist to a new place'], ['Einzelne Artists verschieben: ziehe einen Artist an eine neue Stelle, die Nachbarn weichen aus.', 'Move single artists: drag an artist to a new place, its neighbors make room.'], ['Gespeicherte Positionen einer älteren Version wurden verworfen, die Farben bleiben erhalten.', 'Saved positions from an older version were discarded, your colors are kept.'], ['Speichern ist in dieser Ansicht nicht möglich', 'Saving is not possible in this view'], ['Nicht gespeichert', 'Not saved'], ['Magnet', 'Magnet'], ['(Zusammenhalt)', '(cohesion)'], ['Aus', 'Off'], ['Mittel', 'Medium'], ['Stark', 'Strong'], ['Layout und Farben', 'Layout and colors'], ['Klassisch', 'Classic'], ['Neu', 'New'], ['Klassisch: Anordnung und Farben vom 21.10. – Neu: verbesserte Genre-Zuordnung (21 Kontinente).', 'Classic: layout and colors from 21 Oct – New: improved genre assignment (21 continents).'], ['Kontinente verschieben: ziehe einen Kontinent an eine neue Stelle – die anderen weichen aus und rücken nach.', 'Move continents: drag a continent to a new place – the others make room and move in.'],['Ordne neu …', 'Rearranging …'], ['Positionen zurückgesetzt', 'Positions reset'], ['Ziehe einen Kontinent, um ihn zu verschieben', 'Drag a continent to move it'], ['Kontinente verschieben: ziehe einen Kontinent an eine neue Stelle.', 'Move continents: drag a continent to a new place.'], ['Vergleich', 'Comparison'], ['Wer', 'Who'], ['Beide', 'Both'], ['Wer hört mehr', 'Who listens more'], ['Musik-Übereinstimmung', 'Music match'], ['Gleiche Artists', 'Shared artists'], ['von euch beiden gehört', 'played by both of you'], ['Geteilte Hörzeit', 'Shared listening time'], ['in gemeinsamen Artists', 'in shared artists'], ['Genre-Nähe', 'Genre similarity'], ['Anteil an der jeweiligen Hörzeit', 'Share of each person’s listening time'], ['Gemeinsame Favoriten', 'Shared favorites'], ['Live-Modus', 'Live mode'], ['Live-Modus an', 'Live mode on'], ['Live-Modus aus', 'Live mode off'], ['Gerade läuft nichts', 'Nothing is playing right now'], ['Keine Verbindung zu stats.fm', 'No connection to stats.fm'], ['Neu auf deiner Karte', 'New on your map'], ['Kamera folgt', 'Camera follows'], ['Live · stats.fm', 'Live · stats.fm'], ['und', 'and'], ['Artist · Rang', 'Artist · Rank'], ['An', 'On'], ['Deutschpop', 'German pop'], ['Deutschrap', 'German rap'], ['Elektronik', 'Electronic'], ['Deutsch-Indie', 'German indie'], ['NDW · Indie', 'NDW · Indie'], ['Easy Listening', 'Easy Listening'],
+  ['Zur Startseite', 'Back to home'], ['Feedback geben', 'Give feedback'], ['Projekt unterstützen', 'Support the project'], ['Neue Streams laden', 'Load new streams'], ['Ansicht gespeichert', 'View saved'], ['Vollbild ist hier nicht verfügbar', 'Fullscreen is not available here'], ['Ansicht: Karte', 'View: map'], ['Ansicht: Rangliste in Reihen', 'View: ranking in rows'], ['Ansicht: Spirale', 'View: spiral'], ['Weitere Klänge', 'Other sounds'], ['Kontinente anpassen', 'Adjust continents'], ['Kontinente verschieben', 'Move continents'], ['Lage zurücksetzen', 'Reset positions'], ['Farbschema', 'Color scheme'], ['Original', 'Original'], ['Nach Lage', 'By position'], ['Pastell', 'Pastel'], ['Kräftig', 'Vivid'], ['Farbe und Lage', 'Color and position'], ['Geändert', 'Changed'], ['Farbe ändern', 'Change color'], ['Farben …', 'Colors …'], ['Kontinent verschoben', 'Continent moved'], ['Kontinente getauscht', 'Continents swapped'], ['Karte neu geordnet', 'Map rearranged'], ['Aufräumen', 'Tidy up'], ['Räume auf …', 'Tidying up …'], ['Ziehen: Kontinent', 'Drag: continent'], ['Ziehen: Artist', 'Drag: artist'], ['Zum Kontinent zurückholen', 'Bring back to its continent'], ['Artist zurückgeholt', 'Artist brought back'], ['Ziehe einen Artist an eine neue Stelle', 'Drag an artist to a new place'], ['Einzelne Artists verschieben: ziehe einen Artist an eine neue Stelle, die Nachbarn weichen aus.', 'Move single artists: drag an artist to a new place, its neighbors make room.'], ['Gespeicherte Positionen einer älteren Version wurden verworfen, die Farben bleiben erhalten.', 'Saved positions from an older version were discarded, your colors are kept.'], ['Speichern ist in dieser Ansicht nicht möglich', 'Saving is not possible in this view'], ['Nicht gespeichert', 'Not saved'], ['Magnet', 'Magnet'], ['(Zusammenhalt)', '(cohesion)'], ['Aus', 'Off'], ['Mittel', 'Medium'], ['Stark', 'Strong'], ['Layout und Farben', 'Layout and colors'], ['Klassisch', 'Classic'], ['Neu', 'New'], ['Klassisch: Anordnung und Farben vom 21.10. – Neu: verbesserte Genre-Zuordnung (21 Kontinente).', 'Classic: layout and colors from 21 Oct – New: improved genre assignment (21 continents).'], ['Kontinente verschieben: ziehe einen Kontinent an eine neue Stelle – die anderen weichen aus und rücken nach.', 'Move continents: drag a continent to a new place – the others make room and move in.'],['Ordne neu …', 'Rearranging …'], ['Positionen zurückgesetzt', 'Positions reset'], ['Ziehe einen Kontinent, um ihn zu verschieben', 'Drag a continent to move it'], ['Kontinente verschieben: ziehe einen Kontinent an eine neue Stelle.', 'Move continents: drag a continent to a new place.'], ['Vergleich', 'Comparison'], ['Wer', 'Who'], ['Beide', 'Both'], ['Wer hört mehr', 'Who listens more'], ['Musik-Übereinstimmung', 'Music match'], ['Gleiche Artists', 'Shared artists'], ['von euch beiden gehört', 'played by both of you'], ['Geteilte Hörzeit', 'Shared listening time'], ['in gemeinsamen Artists', 'in shared artists'], ['Genre-Nähe', 'Genre similarity'], ['Anteil an der jeweiligen Hörzeit', 'Share of each person’s listening time'], ['Gemeinsame Favoriten', 'Shared favorites'], ['Live-Modus', 'Live mode'], ['Live-Modus an', 'Live mode on'], ['Live-Modus aus', 'Live mode off'], ['Gerade läuft nichts', 'Nothing is playing right now'], ['Keine Verbindung zu stats.fm', 'No connection to stats.fm'], ['Neu auf deiner Karte', 'New on your map'], ['Kamera folgt', 'Camera follows'], ['Live · stats.fm', 'Live · stats.fm'], ['und', 'and'], ['Artist · Rang', 'Artist · Rank'], ['An', 'On'], ['Deutschpop', 'German pop'], ['Deutschrap', 'German rap'], ['Elektronik', 'Electronic'], ['Deutsch-Indie', 'German indie'], ['NDW · Indie', 'NDW · Indie'], ['Easy Listening', 'Easy Listening'],
   ['Größe = Hörzeit · Farbe = Genre-Kontinent · kleine Quadrate rund um einen Artist = seine Songs · Nähe = ähnliche Musik · Mit Zoom entdeckst du jeden Song', 'Size = listening time · color = genre continent · small squares around an artist = their songs · proximity = similar music · zoom in to discover every song'],
   ['Hintergrund & Farbflächen', 'Background & color fields'], ['Kontinent- und Szenennamen', 'Continent and scene names'], ['Artists & Namen', 'Artists & names'], ['Titel & Legende', 'Title & legend'], ['Layout wird abgeschlossen …', 'Finishing layout …'], ['Karte wird gezeichnet …', 'Drawing the map …'], ['Beschriftungen werden gesetzt …', 'Placing labels …'], ['Cover werden eingebettet …', 'Embedding covers …'], ['Hochauflösende Cover …', 'High-resolution covers …'], ['Sonderzeichen …', 'Special characters …'], ['PDF wird geschrieben …', 'Writing PDF …'], ['Fertig', 'Done'], ['Keine sichtbaren Objekte', 'No visible objects']
 ];
@@ -818,12 +836,16 @@ const CMP = D.compare || null;      // Freundes-Vergleich (zwei Profile in einer
 const art = D.artists, trk = D.tracks, alb = D.albums, regs = D.regions, scs = D.scenes, HUD = D.hud;
 const NA = art.length, NT = trk.length, NB = alb.length;
 /* Zeitmodell: Tagesindex ab HUD.day0 (Epochentag des ersten Tages); Monate werden daraus abgeleitet */
-const ND = HUD.nd, D0 = HUD.day0;
+let ND = HUD.nd; const D0 = HUD.day0;
 const dayDate = d => new Date((D0 + d) * 86400000);
-const MON = [];
-(function () { let d = 0; while (d < ND) { const dt = dayDate(d), y = dt.getUTCFullYear(), m = dt.getUTCMonth(); const e = Math.min(ND, Math.ceil(Date.UTC(y, m + 1, 1) / 86400000 - D0)) - 1; MON.push({ y, m, s: d, e, min: 0, n: 0 }); d = e + 1; } })();
-const NM = MON.length, DAY2M = new Int16Array(ND);
-MON.forEach((mo, i) => { for (let d = mo.s; d <= mo.e; d++) { DAY2M[d] = i; mo.min += HUD.day_min[d]; mo.n += HUD.day_n[d]; } });
+const MON = []; let NM = 0, DAY2M = new Int16Array(ND);
+function buildMonths() {                      // Monate aus den Tagen ableiten (laeuft auch nach dem Nachladen neuer Tage)
+  MON.length = 0; let d = 0;
+  while (d < ND) { const dt = dayDate(d), y = dt.getUTCFullYear(), m = dt.getUTCMonth(); const e = Math.min(ND, Math.ceil(Date.UTC(y, m + 1, 1) / 86400000 - D0)) - 1; MON.push({ y, m, s: d, e, min: 0, n: 0 }); d = e + 1; }
+  NM = MON.length; DAY2M = new Int16Array(ND);
+  MON.forEach((mo, i) => { for (let d2 = mo.s; d2 <= mo.e; d2++) { DAY2M[d2] = i; mo.min += HUD.day_min[d2]; mo.n += HUD.day_n[d2]; } });
+}
+buildMonths();
 const $ = id => document.getElementById(id);
 let NF, NF1, NF2;
 const MN = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
@@ -898,6 +920,12 @@ let PATH = 'map';          // Darstellungspfad: map | artists | songs
 let K_STR = HUD.minutes / Math.max(1, HUD.streams);
 const nameGetter = o => { o.de = o.name; Object.defineProperty(o, 'name', { get() { return LANG === 'en' && o.en ? o.en : o.de; }, set(v) { o.de = v; }, enumerable: true, configurable: true }); };
 regs.forEach(nameGetter); scs.forEach(nameGetter);
+/* Gleich benannte Szenen ("Hip-Hop", "Hip-Hop 2", "Hip-Hop 3" ...) unterscheidbar machen: die zwei meistgehoerten Artists in Klammern (aeltere Karten-Staende tragen noch Nummern) */
+(function nameScenesApart() {
+  const num = n => (n || '').replace(/ \d+$/, ''), by = new Map();
+  scs.forEach(s => { const k = s.reg + '|' + num(s.de); (by.get(k) || by.set(k, []).get(k)).push(s); });
+  by.forEach(list => { if (list.length < 2) return; list.forEach(s => { const t2 = (s.sub || '').split(' · ').slice(0, 2).join(', '); if (!t2) return; const en = s.en ? (EN.has(num(s.en)) ? EN.get(num(s.en)) : num(s.en)) : null; s.de = num(s.de) + ' (' + t2 + ')'; if (en != null) s.en = en + ' (' + t2 + ')'; }); });
+})();
 regs.forEach(r => { r.rgb = hex2rgb(r.color); r.light = lighten(r.rgb, .35); r.cm = r.m; r.members = []; r.shortDe = SHORT[r.anchor] || r.de.split(/[ ,&]/)[0]; Object.defineProperty(r, 'short', { get() { return LANG === 'en' ? (r.short_en || T(r.shortDe)) : r.shortDe; }, enumerable: true, configurable: true }); r.bcx = r.cx; r.bcy = r.cy; r.brad = r.rad; r.tcx = r.cx; r.tcy = r.cy; r.trad = r.rad; r.act = r.n; });
 scs.forEach(s => { s.rgb = hex2rgb(regs[s.reg].color); s.light = lighten(s.rgb, .4); s.cm = s.m; s.members = []; s.bcx = s.cx; s.bcy = s.cy; s.brad = s.rad; s.tcx = s.cx; s.tcy = s.cy; s.trad = s.rad; s.act = s.n; });
 art.forEach((a, i) => {
@@ -1265,7 +1293,9 @@ function drawCoverImg(t, sx, sy, half) {
 }
 
 const labels = [];
-function addLabel(x, y, text, sub, fs, pri, rgb, anchor, bold) { labels.push({ x, y, text, sub, fs: fs * S.fontScale, pri, rgb, anchor, bold }); }
+/* Nur fuer Videoaufnahmen: window.__HIDE(text) -> true blendet diesen Namen aus (nicht gesetzt = nichts wird versteckt) */
+const hidden = txt => !!(window.__HIDE && txt && window.__HIDE(String(txt)));
+function addLabel(x, y, text, sub, fs, pri, rgb, anchor, bold) { if (hidden(text)) return; labels.push({ x, y, text, sub, fs: fs * S.fontScale, pri, rgb, anchor, bold }); }
 
 function draw() {
   if (!atlasReady) return;
@@ -1430,7 +1460,7 @@ function drawTerritoryNames(z, ox, oy) {
   if (S.regionLabels) {
     const order = regs.slice().sort((a, b) => b.rad - a.rad);
     for (let k = 0; k < order.length; k++) {
-      const r = order[k]; if (r.act === 0 || r.rad < 10) continue;
+      const r = order[k]; if (r.act === 0 || r.rad < 10 || hidden(r.name)) continue;
       const px = r.rad * z; const al = smooth(34 * vs, 90 * vs, px) * (1 - smooth(150 * vs, 330 * vs, px)); if (al < .02) continue;
       const sx = r.cx * z + ox, sy = r.cy * z + oy; if (sx < -600 || sx > W + 600 || sy < -400 || sy > H + 400) continue;
       const dim = focus.on && focus.regs !== r.id && !(focus.arts.size && [...focus.arts].some(i => art[i].r === r.id)) ? .3 : 1;
@@ -1469,7 +1499,7 @@ function drawTerritoryNames(z, ox, oy) {
   if (S.sceneLabels) {
     const sorder = scs.slice().sort((a, b) => b.cm - a.cm);
     for (let k = 0; k < sorder.length; k++) {
-      const s = sorder[k]; if (s.n < 6 || s.act < 3) continue;
+      const s = sorder[k]; if (s.n < 6 || s.act < 3 || hidden(s.name)) continue;
       const px = s.rad * z; const al = smooth(70 * vs, 140 * vs, px) * (1 - smooth(380 * vs, 800 * vs, px)); if (al < .02) continue;
       const sx = s.cx * z + ox, sy = s.cy * z + oy; if (sx < -300 || sx > W + 300 || sy < -200 || sy > H + 200) continue;
       const dim = focus.on && !(focus.scene === s.id || focus.regs === s.reg) ? .25 : 1;
@@ -3321,9 +3351,95 @@ async function livePoll() {
   } catch (e) { LIVE.err++; if (LIVE.err === 3) liveRender(); }
   clearTimeout(LIVE.timer); if (LIVE.on) LIVE.timer = setTimeout(livePoll, document.hidden ? 20000 : 6000);
 }
+
+/* ---------- Neue Streams nachladen (beim Oeffnen, per Menue und fortlaufend im Live-Modus) ----------
+   Holt Streams seit dem Stand der Karte von stats.fm, ordnet sie bekannten Songs/Artists zu und rechnet sie in Summen, Tageswerte und Groessen ein.
+   Songs/Artists, die noch nicht auf der Karte sind, werden gezaehlt, erscheinen aber erst nach einem Neuaufbau. */
+const SYNC = { busy: false, no: false, tcache: new Map(), timer: 0 };
+function tzOffsetMs(tz, ts) {                                                    // Abstand der Zeitzone zu UTC zum Zeitpunkt ts (wie beim Bau der Karte)
+  try {
+    const f = new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
+    const p = {}; f.formatToParts(new Date(ts)).forEach(x => { p[x.type] = x.value; });
+    return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - Math.floor(ts / 1000) * 1000;
+  } catch (e) { return 0; }
+}
+const syncOff = ts => HUD.tz ? tzOffsetMs(HUD.tz, ts) : 7200000;                      // aeltere Staende (Python-Bau): fest UTC+2
+const syncOK = () => !CMP && !SYNC.no && HUD.src !== 'spotify' && !!HUD.user && !window.__NOSYNC;
+function syncBase() {
+  if (HUD.lastTs) return { ts: HUD.lastTs + 1, skip: 0 };
+  let ld = ND - 1; while (ld > 0 && !HUD.day_n[ld]) ld--;                         // aeltere Staende: ab Tagesbeginn des letzten Datentags, schon gezaehlte Streams ueberspringen
+  const lt = (D0 + ld) * 86400000; return { ts: lt - syncOff(lt), skip: HUD.day_n[ld] };
+}
+async function syncGet(url) {
+  for (let t = 0; t < 4; t++) {
+    const r = await fetch(url, { cache: 'no-store' });
+    if (r.status === 429) { await new Promise(res => setTimeout(res, 1200 * (t + 1))); continue; }
+    return r;
+  }
+  throw new Error('rate');
+}
+async function syncFetch(after) {
+  const out = new Map(); let before = Date.now() + 86400000;
+  for (let page = 0; page < 12; page++) {
+    const r = await syncGet('https://api.stats.fm/api/v1/users/' + encodeURIComponent(HUD.user) + '/streams?limit=1000&after=' + after + '&before=' + before);
+    if (r.status === 404 || r.status === 401 || r.status === 403) { SYNC.no = true; return null; }
+    if (!r.ok) throw new Error('http ' + r.status);
+    const items = (await r.json()).items || []; let fresh = 0;
+    for (const s of items) if (!out.has(s.id)) { out.set(s.id, s); fresh++; }
+    if (items.length < 1000 || !fresh) break;
+    before = Math.min(Date.parse(items[items.length - 1].endTime) + 1, before - 1);
+  }
+  return Array.from(out.values()).sort((a, b) => a.endTime < b.endTime ? -1 : a.endTime > b.endTime ? 1 : 0);
+}
+async function syncTrack(id) {
+  if (SYNC.tcache.has(id)) return SYNC.tcache.get(id);
+  let tr = null; try { const r = await syncGet('https://api.stats.fm/api/v1/tracks/' + id); if (r.ok) tr = (await r.json()).item; } catch (e) { }
+  SYNC.tcache.set(id, tr); return tr;
+}
+function growDays(newND) {                                                          // neue Tage hinten anhaengen
+  const wasFull = isFull(), oldND = ND;
+  for (let d = ND; d < newND; d++) { HUD.day_min.push(0); HUD.day_n.push(0); }
+  ND = newND; HUD.nd = newND; if (wasFull) rB = ND - 1; if (tv.b === oldND - 1) tv.b = ND - 1;
+}
+const pushDay = (dy, d, min) => { const n = dy.length; if (n && dy[n - 3] === d) { dy[n - 2] += min; dy[n - 1] += 1; } else if (!n || dy[n - 3] < d) dy.push(d, min, 1); };
+async function liveSync(manual) {
+  if (SYNC.busy || !syncOK()) { if (manual && !syncOK()) toast(LANG === 'en' ? 'Updating is not possible for this map' : 'Aktualisieren ist für diese Karte nicht möglich'); return 0; }
+  SYNC.busy = true;
+  try {
+    liveIndex(); const base = syncBase();
+    let list = await syncFetch(base.ts); if (!list) { if (manual) toast(LANG === 'en' ? 'Updating is not possible for this map' : 'Aktualisieren ist für diese Karte nicht möglich'); return 0; }
+    if (base.skip) { let skipped = 0; list = list.filter(s => { if (Date.parse(s.endTime) < base.ts + 86400000 && skipped < base.skip) { skipped++; return false; } return true; }); }
+    if (!list.length) { if (manual) toast(LANG === 'en' ? 'Already up to date' : 'Schon auf dem neuesten Stand'); return 0; }
+    const ids = [...new Set(list.map(s => s.trackId))].filter(id => !SYNC.tcache.has(id)); let qi = 0;
+    await Promise.all(Array.from({ length: 4 }, async () => { while (qi < ids.length) await syncTrack(ids[qi++]); }));
+    let added = 0, unknown = 0, mins = 0;
+    for (const s of list) {
+      const tr = SYNC.tcache.get(s.trackId), t = Date.parse(s.endTime), min = (s.playedMs || 0) / 60000, d = Math.floor((t + syncOff(t)) / 86400000) - D0;
+      if (!tr || d < 0) { unknown++; continue; }
+      const m = liveMatch(tr); if (m.ti === undefined) { unknown++; continue; }
+      if (d >= ND) growDays(d + 1);
+      const tk = trk[m.ti], ar = art[tk.p], al = tk.al >= 0 ? alb[tk.al] : null;
+      [tk, ar, al].forEach(o => { if (!o) return; o.m += min; o.st += 1; pushDay(o.dy, d, min); if (typeof o.l === 'number') o.l = Math.max(o.l, D0 + d); });
+      HUD.minutes += min; HUD.streams += 1; HUD.day_min[d] += min; HUD.day_n[d] += 1; HUD.last = Math.max(HUD.last, D0 + d); HUD.lastTs = Math.max(HUD.lastTs || 0, t);
+      added++; mins += min;
+    }
+    if (!HUD.lastTs && list.length) HUD.lastTs = Date.parse(list[list.length - 1].endTime);
+    if (added) {
+      K_STR = HUD.minutes / Math.max(1, HUD.streams); buildMonths(); computeBuckets();
+      setRange(rA, rB, { force: true, noView: true, keepPlay: true }); renderHud(); requestDraw();
+    }
+    if (added || manual) {
+      const en = LANG === 'en', more = unknown ? (en ? ' · ' + unknown + ' from songs not on your map yet' : ' · ' + unknown + ' von Songs, die noch nicht auf der Karte sind') : '';
+      toast(added ? (en ? '+' + added + ' new streams added' : '+' + added + ' neue Streams hinzugefügt') + more : (en ? 'Already up to date' : 'Schon auf dem neuesten Stand') + more);
+    }
+    return added;
+  } catch (e) { if (manual) toast(LANG === 'en' ? 'Could not reach stats.fm' : 'stats.fm nicht erreichbar'); return 0; }
+  finally { SYNC.busy = false; }
+}
+function syncStart() { if (SYNC.timer) return; SYNC.timer = setInterval(() => { if (LIVE.on && !document.hidden) liveSync(false); }, 75000); }
 function setLive(on) {
   LIVE.on = on; $('t-live').classList.toggle('on', on); liveCard();
-  if (on) { liveIndex(); LIVE.err = 0; liveRender(); livePoll(); LIVE.tick = setInterval(liveTick, 500); toast('Live-Modus an'); }
+  if (on) { liveIndex(); LIVE.err = 0; liveRender(); livePoll(); LIVE.tick = setInterval(liveTick, 500); toast('Live-Modus an'); liveSync(false); syncStart(); }
   else { clearTimeout(LIVE.timer); clearInterval(LIVE.tick); LIVE.cur = null; liveRender(); toast('Live-Modus aus'); }
   requestDraw();
 }
@@ -4139,6 +4255,18 @@ $('tl-close').onclick = () => setTimelineVisible(false);
 $('tl-open').onclick = () => setTimelineVisible(true);
 $('t-link').onclick = () => { setMenu(false); if (drawerTab === 'link' && body.classList.contains('drawer-open')) closeDrawer(); else openDrawer('link'); };
 if ($('t-live')) $('t-live').onclick = () => { setMenu(false); setLive(!LIVE.on); };
+if ($('t-sync')) $('t-sync').onclick = () => { setMenu(false); liveSync(true); };
+/* Huelle der Web-App: Zurueck zur Startseite (Karten bleiben im Browser gespeichert), Feedback-Link und Beta-Marke. Ohne Startseite (Einzeldatei, installierte App) entfallen die Knoepfe. */
+(function shell() {
+  const cfg = window.__KK_CFG__ || {}, prod = !!window.__PRODUCT__;
+  const goHome = () => { try { location.assign(location.pathname); } catch (e) { location.href = './'; } };
+  ['t-homebtn', 't-home'].forEach(id => { const b = $(id); if (!b) return; if (!prod) { b.remove(); return; } b.classList.remove('hidden'); b.onclick = () => { setMenu(false); goHome(); }; });
+  const k = document.querySelector('#hud .kicker');
+  if (k && prod) { k.classList.add('home'); k.setAttribute('role', 'link'); k.tabIndex = 0; k.title = T('Zur Startseite'); k.onclick = goHome; k.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goHome(); } }; }
+  if (k && cfg.beta) k.insertAdjacentHTML('beforeend', '<span class="beta">Beta</span>');
+  const pick = v => (v && typeof v === 'object') ? (v[LANG] || v.de || v.en || '') : (v || '');  /* ein Link fuer alle Sprachen oder { de, en } */
+  [['t-feedback', cfg.feedback], ['t-donate', cfg.donate]].forEach(([id, v]) => { const b = $(id); if (!b) return; if (pick(v)) { b.classList.remove('hidden'); b.onclick = () => { setMenu(false); window.open(pick(v), '_blank', 'noopener'); }; } else b.remove(); });
+})();
 $('t-edit').onclick = () => { setMenu(false); rcEdit(!RC.edit); };
 $('t-clean').onclick = () => { setMenu(false); setClean(!UI.clean); };
 $('clean-exit').onclick = () => setClean(false);
@@ -4251,7 +4379,8 @@ new ResizeObserver(() => { mmResize(); }).observe($('minimap'));
   $('minimap').classList.toggle('hidden', !UI.minimap); $('legend').classList.toggle('hidden', !UI.legend);
   mmResize(); placeMinimap();
   await loadAtlas(); atlasReady = true;
-  cmpInit(); rcInit(); if (CMP) $('t-live').remove();
+  cmpInit(); rcInit(); if (CMP) { $('t-live').remove(); if ($('t-sync')) $('t-sync').remove(); } else if (syncOK()) setTimeout(() => liveSync(false), 2500);
+  if (HUD.src === 'spotify' && $('t-sync')) $('t-sync').remove();
   recolor(); recompute(); rankings(); renderHud(); renderPresets(); renderDrawer(); tlResize(); onRangeChange();
   applyLayout({ instant: true, fit: false }); fitAll(false); syncSettingsUI(); mmResize();
   requestDraw();
@@ -4259,7 +4388,7 @@ new ResizeObserver(() => { mmResize(); }).observe($('minimap'));
   setTimeout(() => { $('loading').style.display = 'none'; }, 1100);
   try { if (!localStorage.getItem('klangkarte-help')) { $('help').classList.add('show'); localStorage.setItem('klangkarte-help', '1'); } } catch (e) { }
 })();
-window.__km = { prof: profileDraw, tick: n => { let c = 0; for (let i = 0; i < n; i++) { stepAnim(16, performance.now() + i * 16); c++; if (!animOn && !solver) break; } return c; }, get solving() { return !!solver; }, S, UI, show, setSetting, applyLayout, get PATH() { return PATH; }, bench: n => { const t = performance.now(); for (let i = 0; i < (n || 20); i++) draw(); return (performance.now() - t) / (n || 20); }, cam, art, trk, alb, regs, scs, selectItem, setRange, fitAll, goto_, focusOn, tourStart, get sel() { return sel; }, frameStats, RC, rcPreset, rcDev: { rcTidy, rcReturnArtist, rcArtistDrop, robustCenter, rcFlowStep, rcGridInit, rcSetMass, RPH, RSIM, rcSimInit, rcSimRun, rcSimStep, rcApply, rcGeo, rcPositions, rcResetPositions, rcContacts, rcCentroids },mmDbg: () => ({ mmW, mmH, mmDirty, mmw: mm.width, base: mmBase && mmBase.width, frameN, uimm: UI.minimap, glowW: glow.width }), setWho, CMP, live: { LIVE, liveSet, setLive }, pdf: exportPDF, PDFX, lk: { LK, findRoutes, hopInfo, hopLines, graph, dijkstra, get LINKV() { return LINKV; }, set: lkSet, run: lkRun, rand: lkRand } };
+window.__km = { prof: profileDraw, tick: n => { let c = 0; for (let i = 0; i < n; i++) { stepAnim(16, performance.now() + i * 16); c++; if (!animOn && !solver) break; } return c; }, get solving() { return !!solver; }, S, UI, show, setSetting, applyLayout, get PATH() { return PATH; }, bench: n => { const t = performance.now(); for (let i = 0; i < (n || 20); i++) draw(); return (performance.now() - t) / (n || 20); }, cam, art, trk, alb, regs, scs, selectItem, setRange, fitAll, goto_, focusOn, tourStart, get sel() { return sel; }, frameStats, RC, rcPreset, vid: { stopFly: () => { fly = null; inertia = null; }, get LB() { return LB; }, hopInfo, tagName, LK, lkSet, lkRun, lkReset, clearSel, dijkstra, setClean, requestDraw, computeFocus, get LINKV() { return LINKV; }, get rA() { return rA; }, get rB() { return rB; }, get ND() { return ND; }, HUD, dayDate }, rcDev: { rcTidy, rcReturnArtist, rcArtistDrop, robustCenter, rcFlowStep, rcGridInit, rcSetMass, RPH, RSIM, rcSimInit, rcSimRun, rcSimStep, rcApply, rcGeo, rcPositions, rcResetPositions, rcContacts, rcCentroids },mmDbg: () => ({ mmW, mmH, mmDirty, mmw: mm.width, base: mmBase && mmBase.width, frameN, uimm: UI.minimap, glowW: glow.width }), setWho, CMP, live: { LIVE, liveSet, setLive }, pdf: exportPDF, PDFX, lk: { LK, findRoutes, hopInfo, hopLines, graph, dijkstra, get LINKV() { return LINKV; }, set: lkSet, run: lkRun, rand: lkRand } };
 
 })();
 </script>
