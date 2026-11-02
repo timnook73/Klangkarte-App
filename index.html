@@ -101,7 +101,7 @@ a:hover{text-decoration:underline}
 .res-empty{padding:14px;color:var(--muted);font-size:13px;text-align:center}
 
 /* ---------- Ansicht-Leiste ---------- */
-#viewbar{position:fixed;left:50%;top:calc(72px + var(--sit));transform:translateX(-50%);z-index:5;display:flex;gap:12px;align-items:center;padding:5px 8px;max-width:calc(100vw - 700px)}
+#viewbar{position:fixed;left:50%;top:calc(72px + var(--sit));transform:translateX(-50%);z-index:5;display:flex;gap:12px;align-items:center;padding:5px 8px;max-width:calc(100vw - 32px);flex-wrap:wrap;justify-content:center;row-gap:6px}
 #viewbar .grp{display:flex;align-items:center;gap:6px}
 #viewbar .lbl{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
 #viewbar .seg{margin:0}
@@ -311,7 +311,7 @@ body.clean #clean-exit{display:grid}
 
 /* Bei geoeffneter Seitenleiste Suche und Ansicht-Leiste im freien Bereich zentrieren */
 body.drawer-open #search{left:calc((350px + (100vw - var(--drawer-w) - 128px)) / 2);width:min(420px,calc(100vw - var(--drawer-w) - 128px - 370px));min-width:260px}
-body.drawer-open #viewbar{left:calc((350px + (100vw - var(--drawer-w) - 128px)) / 2);max-width:calc(100vw - var(--drawer-w) - 128px - 360px)}
+body.drawer-open #viewbar{left:calc((350px + (100vw - var(--drawer-w) - 128px)) / 2);max-width:calc(100vw - var(--drawer-w) - 128px - 40px)}
 body.drawer-open #viewbar .lbl{display:none}
 @media (max-width:1180px){
   #viewbar .lbl{display:none}
@@ -351,7 +351,12 @@ body.drawer-open #viewbar .lbl{display:none}
   #timeline .pre{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;align-content:flex-start;align-items:center;width:auto;min-height:30px;padding-bottom:2px;scrollbar-width:none}
   #timeline .pre::-webkit-scrollbar{display:none}
   .pchip{padding:5px 12px;flex:none}
-  #caption{bottom:calc(var(--tl-h) + 90px + var(--sib))}
+  #caption{bottom:calc(var(--tl-h) + 10px + var(--sib));width:calc(100vw - 20px);padding:10px 14px}
+  #caption h2{font-size:17px;margin:2px 0}
+  #caption p{font-size:12px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  #caption .tb{margin-top:8px;gap:6px}
+  #caption .tb .btn{padding:5px 10px;font-size:12px}
+  body.drawer-open #live{display:none}
   #help .grid{grid-template-columns:1fr}
 }
 
@@ -474,6 +479,13 @@ body.drawer-open #live{left:calc((100vw - var(--drawer-w) - 28px)/2)}
 @media (max-width:700px){#edit-banner{padding:8px 10px;gap:6px;font-size:12px}#edit-banner span{flex:1 1 100%;text-align:center}#edit-banner .btn{padding:5px 9px;font-size:12px}}
 #edit-banner .btn{padding:6px 12px;font-size:12.5px}
 body.edit-conts #map{cursor:move}
+
+/* Einstellungen: einklappbare Gruppen und Suche */
+.set-search{width:100%;box-sizing:border-box;margin:0 0 10px;padding:9px 12px;border-radius:10px;background:var(--w05);color:var(--text);border:1px solid var(--line2);font:inherit;font-size:14px}
+.fold-h{cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none}
+.fold-h::after{content:'';flex:none;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);opacity:.6;transition:transform .2s;margin:0 4px 3px 8px}
+.fold.closed>.fold-h::after{transform:rotate(-45deg);margin-bottom:0}
+.fold.closed>.fold-body{display:none}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -2117,6 +2129,7 @@ function setTab(t, silent) {
 function renderDrawer() {
   const st = dbody.scrollTop;
   if (drawerTab === 'detail') dbody.innerHTML = detailHTML(); else if (drawerTab === 'top') dbody.innerHTML = topHTML(); else if (drawerTab === 'settings') dbody.innerHTML = settingsHTML(); else if (drawerTab === 'cmp') dbody.innerHTML = cmpHTML(); else if (drawerTab === 'link') { dbody.innerHTML = linkHTML(); } else dbody.innerHTML = regionsHTML();
+  if (drawerTab === 'settings') settingsFold();
   dbody.scrollTop = st;
   if (drawerTab === 'detail' && sel) {
     if (sel.t === 'a') upgradeHero('a', art[sel.i]); else if (sel.t === 'k') { const al = alb[trk[sel.i].al]; if (al) upgradeHero('b', al); } else if (sel.t === 'b') upgradeHero('b', alb[sel.i]);
@@ -3932,7 +3945,7 @@ function rcEdit(on) {
   RC.edit = on; document.body.classList.toggle('edit-conts', on); $('t-edit').classList.toggle('on', on);
   let b = $('edit-banner');
   if (!b) { b = document.createElement('div'); b.id = 'edit-banner'; b.className = 'glass'; b.innerHTML = '<span id="edit-hint"></span><button class="btn" data-ed="unit"></button><button class="btn" data-ed="mag"></button><button class="btn" data-ed="tidy">Aufräumen</button><button class="btn" data-ed="colors">Farben …</button><button class="btn" data-ed="reset">Zurücksetzen</button><button class="btn pri" data-ed="done">Fertig</button>'; document.body.appendChild(b);
-    b.addEventListener('click', e => { const x = e.target.closest('[data-ed]'); if (!x) return; if (x.dataset.ed === 'done') rcEdit(false); else if (x.dataset.ed === 'mag') rcSetMagnet((RC.magnet + 1) % 3); else if (x.dataset.ed === 'unit') rcSetUnit(RC.unit === 'region' ? 'artist' : 'region'); else if (x.dataset.ed === 'tidy') rcTidy(); else if (x.dataset.ed === 'reset') rcResetPositions(); else { openDrawer('settings'); setTimeout(() => { const s = document.getElementById('rc-sect'); if (s) s.scrollIntoView({ block: 'start' }); }, 60); } }); }
+    b.addEventListener('click', e => { const x = e.target.closest('[data-ed]'); if (!x) return; if (x.dataset.ed === 'done') rcEdit(false); else if (x.dataset.ed === 'mag') rcSetMagnet((RC.magnet + 1) % 3); else if (x.dataset.ed === 'unit') rcSetUnit(RC.unit === 'region' ? 'artist' : 'region'); else if (x.dataset.ed === 'tidy') rcTidy(); else if (x.dataset.ed === 'reset') rcResetPositions(); else { openDrawer('settings'); setTimeout(() => { const s = document.getElementById('rc-sect'); if (s) { openFoldOf(s); s.scrollIntoView({ block: 'start' }); } }, 60); } }); }
   b.classList.toggle('show', on); rcLabels();
   if (on) { clearSel(); toast(RC.unit === 'artist' ? 'Ziehe einen Artist an eine neue Stelle' : 'Ziehe einen Kontinent, um ihn zu verschieben'); }
 }
@@ -3945,7 +3958,32 @@ function rcLabels() {
 }
 function rcSetMagnet(v) { RC.magnet = v; rcSave(); rcLabels(); if (drawerTab === 'settings') renderDrawer(); toast(T('Magnet') + ': ' + T(RMAG[v])); }
 function rcSetUnit(u) { RC.unit = u; rcLabels(); if (drawerTab === 'settings') renderDrawer(); toast(u === 'artist' ? T('Ziehe einen Artist an eine neue Stelle') : T('Ziehe einen Kontinent, um ihn zu verschieben')); }
-function rcInit() { rcLoad(); rcApplySaved(); if (RC.dropped) { RC.dropped = false; rcSave(); setTimeout(() => toast(T('Gespeicherte Positionen einer älteren Version wurden verworfen, die Farben bleiben erhalten.')), 2500); } }
+/* Standard-Farbschema ist "Nach Lage": gilt, solange fuer diese Karte noch nichts gespeichert wurde (wird nicht selbst gespeichert) */
+function rcDefaultColors() {
+  const gx = regs.reduce((s, r) => s + r.cx, 0) / regs.length, gy = regs.reduce((s, r) => s + r.cy, 0) / regs.length;
+  regs.forEach(r => setRegionColor(r, rgb2hex(fromHsl((Math.atan2(r.cy - gy, r.cx - gx) * 180 / Math.PI + 360) % 360 + 15, .6, .68)), false));
+}
+/* Layout-Code: Farben und Positionen dieser Karte als Text (zum Uebertragen zwischen Geraeten; kann in config.js als Standard hinterlegt werden: layout: { classic: 'KK1:...' }) */
+function rcPack() {
+  const colors = {}; regs.forEach(r => { if (r.color.toLowerCase() !== r.color0.toLowerCase()) colors[rkey(r)] = r.color; });
+  const pos = art.map(a => [Math.round(a.bx * 10) / 10, Math.round(a.by * 10) / 10]);
+  return 'KK1:' + btoa(unescape(encodeURIComponent(JSON.stringify({ colors, pos, anc: RC.anc, opos: RC.opos, mag: RC.magnet }))));
+}
+function rcUnpack(code) {
+  try { const o = JSON.parse(decodeURIComponent(escape(atob(String(code).trim().replace(/^KK1:/, ''))))); return o && Array.isArray(o.pos) && o.pos.length === NA ? o : null; } catch (e) { return null; }
+}
+function rcAdopt(o) { RC.colors = o.colors || {}; RC.pos = o.pos; RC.anc = o.anc || {}; RC.opos = o.opos || {}; RC.magnet = o.mag === 0 || o.mag === 2 ? o.mag : 1; }
+function rcCodeExport() {
+  const c = rcPack(), done = () => toast(T('Layout-Code kopiert. Auf dem anderen Gerät unter „Layout einfügen“ einfügen.'));
+  try { navigator.clipboard.writeText(c).then(done, () => window.prompt(T('Layout-Code (alles kopieren):'), c)); } catch (e) { window.prompt(T('Layout-Code (alles kopieren):'), c); }
+}
+function rcCodeImport() {
+  const c = window.prompt(T('Layout-Code einfügen:')); if (!c) return;
+  const o = rcUnpack(c); if (!o) { toast(T('Der Code passt nicht zu dieser Karte.')); return; }
+  rcAdopt(o); rcSave(); location.reload();
+}
+function rcBuiltin() { try { const L = (window.__KK_CFG__ || {}).layout, c = L && (typeof L === 'object' ? L[MAPV || 'default'] : L); return c ? rcUnpack(c) : null; } catch (e) { return null; } }
+function rcInit() { let fresh = false; try { fresh = !localStorage.getItem(RC.key) && !localStorage.getItem(RC.legacy); } catch (e) { } rcLoad(); const bi = fresh ? rcBuiltin() : null; if (bi) { rcAdopt(bi); fresh = false; } rcApplySaved(); if (fresh && regs.length) rcDefaultColors(); if (RC.dropped) { RC.dropped = false; rcSave(); setTimeout(() => toast(T('Gespeicherte Positionen einer älteren Version wurden verworfen, die Farben bleiben erhalten.')), 2500); } }
 
 /* ---- Oberflaeche: Farbwahl je Kontinent (Einstellungen) ---- */
 function rcHTML() {
@@ -3953,6 +3991,7 @@ function rcHTML() {
   if (MAPS) h += '<div class="sect"><h3>Karte <em>Layout und Farben</em></h3></div><div class="btns" style="margin:0 0 4px">' + [['classic', 'Klassisch'], ['neu', 'Neu']].filter(m => MAPS[m[0]]).map(m => '<button class="btn' + (MAPV === m[0] ? ' pri' : '') + '" data-map="' + m[0] + '">' + m[1] + '</button>').join('') + '</div><div class="hint" style="margin:0 0 10px;font-size:12px;opacity:.7">Klassisch: Anordnung und Farben vom 21.10. – Neu: verbesserte Genre-Zuordnung (21 Kontinente).</div>';
   h += '<div class="sect" id="rc-sect"><h3>Kontinente <em>Farbe und Lage</em></h3></div>';
   h += '<div class="btns" style="margin:0 0 8px"><button class="btn' + (RC.edit ? ' pri' : '') + '" data-rcp="edit">Kontinente verschieben</button><button class="btn" data-rcp="resetpos">Lage zurücksetzen</button><button class="btn" data-rcp="tidy">Aufräumen</button></div>';
+  h += '<div class="btns" style="margin:0 0 8px"><button class="btn" data-rcp="codeout">Layout kopieren</button><button class="btn" data-rcp="codein">Layout einfügen</button></div>';
   h += '<div class="rc-presets"><span>Magnet <em style="opacity:.6">(Zusammenhalt)</em></span>' + RMAG.map((m, i) => '<button class="btn' + (RC.magnet === i ? ' pri' : '') + '" data-rcm="' + i + '">' + m + '</button>').join('') + '</div>';
   h += '<div class="rc-presets"><span>Farbschema</span>' + [['orig', 'Original'], ['spectrum', 'Nach Lage'], ['pastel', 'Pastell'], ['vivid', 'Kräftig']].map(p => '<button class="btn" data-rcp="' + p[0] + '">' + p[1] + '</button>').join('') + '</div>';
   h += '<div class="rc-list">' + regs.slice().sort((a, b) => b.cm - a.cm).map(r => '<label class="rc-row"><input type="color" value="' + r.color + '" data-rc="' + r.id + '"><span>' + esc(r.name) + '</span>' + (RC.colors[rkey(r)] ? '<i class="rc-mod" title="Geändert"></i>' : '') + '</label>').join('') + '</div>';
@@ -3964,7 +4003,7 @@ document.addEventListener('click', e => {
   const mp = e.target.closest('[data-map]'); if (mp) { const v = mp.dataset.map; if (v === MAPV) return; try { localStorage.setItem('kk-map', v); } catch (e) { } try { location.hash = 'map=' + v; location.reload(); } catch (e) { location.reload(); } return; }
   const mb = e.target.closest('[data-rcm]'); if (mb) { rcSetMagnet(+mb.dataset.rcm); return; }
   const b = e.target.closest('[data-rcp]'); if (!b) return; const k = b.dataset.rcp;
-  if (k === 'edit') rcEdit(!RC.edit); else if (k === 'resetpos') rcResetPositions(); else if (k === 'tidy') rcTidy(); else rcPreset(k);
+  if (k === 'edit') rcEdit(!RC.edit); else if (k === 'resetpos') rcResetPositions(); else if (k === 'tidy') rcTidy(); else if (k === 'codeout') rcCodeExport(); else if (k === 'codein') rcCodeImport(); else rcPreset(k);
 });
 
 /* =====================================================================
@@ -4148,6 +4187,40 @@ function placeMinimap() {
   $('lg-close').addEventListener('click', () => setUI('legend', false));
   window.addEventListener('resize', placeMinimap);
 })();
+
+/* ---------- Einstellungen: Gruppen einklappbar (am Handy standardmaessig zu) und durchsuchbar ---------- */
+let setQ = '', foldPref = {};
+try { foldPref = JSON.parse(localStorage.getItem('kk-folds') || '{}') || {}; } catch (e) { }
+const foldIsOpen = t => (t in foldPref) ? !!foldPref[t] : innerWidth > 900;
+function foldSave() { try { localStorage.setItem('kk-folds', JSON.stringify(foldPref)); } catch (e) { } }
+function settingsFold() {
+  const groups = []; let cur = null;
+  Array.from(dbody.children).forEach(k => {
+    if (k.classList.contains('sect') && k.querySelector('h3')) { cur = { head: k, kids: [], title: k.querySelector('h3').textContent.trim() }; groups.push(cur); }
+    else if (cur) cur.kids.push(k);
+  });
+  groups.forEach(g => {
+    const f = document.createElement('div'), b = document.createElement('div'); f.className = 'fold'; f.dataset.t = g.title; b.className = 'fold-body';
+    dbody.insertBefore(f, g.head); g.head.classList.add('fold-h'); f.appendChild(g.head); f.appendChild(b); g.kids.forEach(k => b.appendChild(k));
+  });
+  dbody.insertAdjacentHTML('afterbegin', '<input class="set-search" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(T('Einstellungen suchen …')) + '" value="' + esc(setQ) + '" aria-label="' + esc(T('Einstellungen suchen …')) + '">');
+  settingsFilter();
+}
+function settingsFilter() {
+  const q = setQ.trim().toLowerCase();
+  dbody.querySelectorAll('.fold').forEach(f => {
+    const title = f.dataset.t, titleHit = !!q && title.toLowerCase().includes(q); let any = false;
+    Array.from(f.querySelector('.fold-body').children).forEach(c => { const hit = !q || titleHit || c.textContent.toLowerCase().includes(q); c.style.display = hit ? '' : 'none'; if (hit) any = true; });
+    f.style.display = (any || !q) ? '' : 'none';
+    f.classList.toggle('closed', q ? false : !foldIsOpen(title));
+  });
+}
+function openFoldOf(el) { const f = el && el.closest && el.closest('.fold'); if (f) { foldPref[f.dataset.t] = true; foldSave(); settingsFilter(); } }
+dbody.addEventListener('input', e => { if (e.target.classList && e.target.classList.contains('set-search')) { setQ = e.target.value; settingsFilter(); } });
+dbody.addEventListener('click', e => {
+  const h = e.target.closest('.fold-h'); if (!h || setQ.trim()) return; const f = h.closest('.fold');
+  foldPref[f.dataset.t] = f.classList.contains('closed'); foldSave(); settingsFilter();
+});
 
 /* =====================================================================
    KLANGKARTE – Interaktion & Start
