@@ -618,8 +618,9 @@ body.clean #survey{display:none !important}
    surveyDelay : Sichtzeit auf der Karte in Millisekunden, nach der einmalig der Umfrage-Hinweis erscheint (Standard 45000, 0 = aus). Der Link kommt aus "feedback" (deutsch/englisch je nach Sprache).
    reportMail : Adresse fuer "Fehler melden" (falscher Kontinent/Genre, falsche Vorschau). Standard tunelands@proton.me. Es wird nur eine vorbereitete Mail geoeffnet (Senden macht der Nutzer).
    reportUrl  : statt Mail ein Formular oeffnen (z. B. Google Forms); der Meldungstext liegt dann in der Zwischenablage.
+   globalFix  : feste Korrekturen je Benutzername, z. B. { timnook73: { hideArtists: ['Madcon'] } } (stats.fm ordnet "In My Head" von Bedroom falsch Madcon zu). Wirkt nur auf die Karte dieses Benutzers.
    Nach einer Aenderung: bash build/rebuild.sh (Handy-App/eigene Karte) bzw. python produkt/build_product.py (Web-Seite), dann hochladen. */
-window.__KK_CFG__ = { beta: true, social: { instagram: 'https://www.instagram.com/tunelands', tiktok: 'https://www.tiktok.com/@tunelands_maps', youtube: 'https://youtube.com/@tunelands-g3m' }, surveyDelay: 45000, feedback: { de: 'https://forms.gle/NTLa8HdU3VVyVPB2A', en: 'https://forms.gle/PPHFLRUQ33v95NTx8' }, donate: '', betaDate: '2026-11-08' };
+window.__KK_CFG__ = { beta: true, social: { instagram: 'https://www.instagram.com/tunelands', tiktok: 'https://www.tiktok.com/@tunelands_maps', youtube: 'https://youtube.com/@tunelands-g3m' }, surveyDelay: 45000, globalFix: { timnook73: { hideArtists: ['Madcon'] } }, feedback: { de: 'https://forms.gle/NTLa8HdU3VVyVPB2A', en: 'https://forms.gle/PPHFLRUQ33v95NTx8' }, donate: '', betaDate: '2026-11-08' };
 </script>
 </head>
 <body>
@@ -4502,6 +4503,12 @@ function fxLand(a) {
   const c = fxCen(a.reg, a.i, true); FXS.off[k] = [Math.round(a.bx - c[0]), Math.round(a.by - c[1])]; fxRebase(a, FXS.off[k]); delete RC.opos[a.i];
 }
 function fxRefresh() { recompute(); rankings(); rcGeo(); updateRegionGeom(); rcColorsApplied(); }
+/* Feste Korrekturen fuer eine bestimmte Karte (config.js: globalFix { benutzername: { hideArtists: ['Name'] } }), z. B. wenn stats.fm einem Artist fremde Streams zuordnet; nicht rueckgaengig machbar */
+const FXG = new Set();
+(function fxGlobal() {
+  const g = ((window.__KK_CFG__ || {}).globalFix || {})[HUD.user]; if (!g || !Array.isArray(g.hideArtists)) return;
+  art.forEach(a => { if (g.hideArtists.indexOf(a.n) >= 0) { FX.a.add(a.i); FXG.add(a.i); } }); fxCount();
+})();
 /* Beim Start: gespeicherte Korrekturen anwenden (vor den gespeicherten Positionen und Farben der Kontinente) */
 (function fxLoad() {
   try {
@@ -4573,7 +4580,7 @@ function fxApply() {
   if ($('fx-send').checked) fxSend(rep);
 }
 function fxUndo(kind, id) {
-  if (kind === 'a') { const a = art[id]; FX.a.delete(id); FXS.a = FXS.a.filter(k => k !== fxKA(a)); }
+  if (kind === 'a') { if (FXG.has(id)) return; const a = art[id]; FX.a.delete(id); FXS.a = FXS.a.filter(k => k !== fxKA(a)); }
   else if (kind === 'k') { const t = trk[id]; FX.k.delete(id); FXS.k = FXS.k.filter(k => k !== fxKT(t)); }
   else if (kind === 'p') { const t = trk[id]; if (t.pv0) { t.pv = t.pv0; } FXS.pv = FXS.pv.filter(k => k !== fxKT(t)); }
   else if (kind === 'm') { const a = art[id]; if (a.r0 != null) fxMoveTo(a, a.r0); return; }
@@ -4582,7 +4589,7 @@ function fxUndo(kind, id) {
 /* ---------- Einstellungen: Liste der Korrekturen ---------- */
 function fixSettingsHTML() {
   const rows = [];
-  FX.a.forEach(i => rows.push(['Artist ausgeblendet', art[i].n, '', 'a' + i]));
+  FX.a.forEach(i => { if (!FXG.has(i)) rows.push(['Artist ausgeblendet', art[i].n, '', 'a' + i]); });
   FX.k.forEach(i => rows.push(['Song ausgeblendet', trk[i].n, trk[i].a.map(x => art[x].n).join(', '), 'k' + i]));
   trk.forEach(t => { if (t.pv0 && !t.pv) rows.push(['Vorschau entfernt', t.n, t.a.map(x => art[x].n).join(', '), 'p' + t.i]); });
   art.forEach(a => { if (a.r0 != null && a.r !== a.r0) rows.push(['Verschoben nach ' + a.reg.name, a.n, 'zuvor ' + regs[a.r0].name, 'm' + a.i]); });
