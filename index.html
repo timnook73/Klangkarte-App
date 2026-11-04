@@ -599,6 +599,19 @@ body.clean #survey{display:none !important}
 .fx-chk small{display:block;color:var(--muted);font-size:11.5px;line-height:1.4;margin-top:2px}
 #fixdlg .btns{margin-top:14px}
 
+/* ---- Schnellzugriff unten rechts: Social-Links und Umfrage ---- */
+#quick{position:fixed;right:calc(16px + var(--sir));bottom:calc(var(--tl-h) + 28px + var(--sib));z-index:7;display:flex;align-items:center;gap:2px;padding:4px 6px;border-radius:999px}
+body.drawer-open #quick{right:calc(var(--drawer-w) + 28px + var(--sir))}
+body.tl-off #quick{bottom:calc(28px + var(--sib))}
+#quick a,#quick button{display:grid;place-items:center;min-width:32px;height:32px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:600;padding:0 8px;text-decoration:none}
+#quick a:hover,#quick button:hover{color:var(--text);background:var(--w10);text-decoration:none}
+#quick button{color:var(--accent)}
+#quick button.hidden{display:none}
+body.clean #quick,body:has(#caption.show) #quick{display:none !important}
+#pv-mini{bottom:calc(var(--tl-h) + 76px + var(--sib))}
+body.tl-off #pv-mini{bottom:calc(76px + var(--sib))}
+@media (max-width:900px){ body.drawer-open #quick{display:none} }
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#070910">
@@ -763,6 +776,7 @@ window.__KK_CFG__ = { beta: true, social: { instagram: 'https://www.instagram.co
   <label class="fx-chk"><input type="checkbox" id="fx-send" checked><span>Meldung an Tunelands senden<small>Öffnet eine vorbereitete E-Mail (und kopiert den Text). So kann der Fehler später für alle Karten behoben werden.</small></span></label>
   <div class="btns"><button class="btn pri" id="fx-go">Korrigieren</button><button class="btn" id="fx-cancel">Abbrechen</button></div>
 </div></div>
+<div id="quick" class="glass"><a id="qk-ig" target="_blank" rel="noopener" href="#" aria-label="Instagram" title="Instagram"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="4.2"/><circle cx="10" cy="10" r="3.3"/><circle cx="14.3" cy="5.7" r=".7" fill="currentColor"/></svg></a><a id="qk-tt" target="_blank" rel="noopener" href="#" aria-label="TikTok" title="TikTok"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11.2 3v9.6a2.8 2.8 0 1 1-2.8-2.8"/><path d="M11.2 3c.3 2.1 1.7 3.5 4 3.7"/></svg></a><a id="qk-yt" target="_blank" rel="noopener" href="#" aria-label="YouTube" title="YouTube"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2.3" y="4.8" width="15.4" height="10.4" rx="3.2"/><path d="M8.5 7.5v5l4.3-2.5z" fill="currentColor"/></svg></a><button id="qk-sv" class="hidden" aria-label="Zur Umfrage" title="Zur Umfrage">Umfrage</button></div>
 <div id="toast" class="glass"></div>
 <div id="caption" class="glass"></div>
 
@@ -839,6 +853,7 @@ const I18N_PAIRS = [
   ['Fehler, die du über „Fehler melden“ in der Detailansicht eines Artists oder Songs korrigierst, gelten sofort auf dieser Karte und bleiben im Browser gespeichert. Hier kannst du sie zurücknehmen.', 'Problems you fix via “Report a problem” in an artist’s or song’s detail view apply to this map immediately and stay saved in your browser. You can undo them here.'],
   ['Noch keine Korrekturen.', 'No corrections yet.'], ['Artist ausgeblendet', 'Artist hidden'], ['Song ausgeblendet', 'Song hidden'], ['Vorschau entfernt', 'Preview removed'],
   ['Korrigiert:', 'Fixed:'],
+  ['Das Standard-Preset von Tunelands', 'The Tunelands default preset'],
   /* --- Zeitleiste --- */
   ['Zeitraum', 'Period'], ['Gesamte Zeit', 'All time'], ['Entwicklung', 'Growth'], ['Entwicklung abspielen', 'Play growth over time'], ['Pause', 'Pause'], ['Alles', 'All'], ['Letzter Tag', 'Last day'], ['7 Tage', '7 days'], ['30 Tage', '30 days'], ['90 Tage', '90 days'],
   ['Zeitraum nach Datum', 'Period by date'], ['Von', 'From'], ['Bis', 'To'], ['Datum eingeben', 'Enter a date'], ['Achse herauszoomen', 'Zoom timeline out'], ['Achse hineinzoomen (auch Mausrad oder Pinch auf der Achse)', 'Zoom timeline in (also mouse wheel or pinch on the axis)'], ['Achse nach links', 'Move timeline left'], ['Achse nach rechts', 'Move timeline right'],
@@ -1064,17 +1079,17 @@ function ramp(stops, t) {
 
 /* ---------- Einstellungen / Zustand ---------- */
 const S = {
-  theme: 'night', font: 'sans', fontScale: 1, labelDensity: 1,
-  regionLabels: true, regionSize: 1, sceneLabels: true,
-  stars: true, glowAmt: 1,
+  theme: 'night', font: 'round', fontScale: 1, labelDensity: 1.2,
+  regionLabels: true, regionSize: .5, sceneLabels: true,
+  stars: true, glowAmt: 1.6,
   view: 'map',            // map | rows | spiral
   objs: 'artists',        // artists | songs   (nur Rangliste/Spirale)
   metric: 'min',          // min | str
-  timeMode: 'dynamic',    // dynamic | fixed
+  timeMode: 'fixed',      // dynamic | fixed
   sizeCurve: 'sqrt',      // soft | sqrt | strong
-  artScale: 1, songScale: 1, spread: 1, moonScale: .9,
+  artScale: 1.1, songScale: 1.55, spread: .95, moonScale: 1,
   colorMode: 'region',    // region | heat | new
-  linkAmt: 1, rings: true, followCam: true, animSpeed: 1,
+  linkAmt: 1.1, rings: true, followCam: true, animSpeed: .6,
   perf: 'balanced',
   topN: 0, minMin: 0, minStr: 0,      // Filter: nur Top-N, Mindest-Hoerzeit (min), Mindest-Streams
   who: 'B'                            // Vergleich: B = beide, M = ich, F = Freund
@@ -1086,7 +1101,7 @@ const PERF = {
 };
 const PF = () => PERF[S.perf] || PERF.balanced;
 const show = { songs: true, links: true, labels: true };
-const UI = { minimap: true, legend: true, mmPos: null, timeline: true, clean: false };
+const UI = { minimap: false, legend: false, mmPos: null, timeline: true, clean: false };
 const THEMES = {
   night: { name: 'Mitternacht', ui: 'dark', base: '#070910', bg: ['#0f1424', '#080a14', '#04050a'], dust: '190,205,255', glowMode: 'lighter', glowK: 1, halo: 'rgba(5,7,13,.88)', haloS: 'rgba(4,6,12,.82)', text: '#d9deee', textB: '#f3f5fb', sub: 'rgba(222,227,242,.92)', hl: '#ffffff', tint: 'light' },
   black: { name: 'Tiefschwarz', ui: 'dark', base: '#000000', bg: ['#050507', '#020203', '#000000'], dust: '210,215,255', glowMode: 'lighter', glowK: .8, halo: 'rgba(0,0,0,.92)', haloS: 'rgba(0,0,0,.88)', text: '#dde1ee', textB: '#ffffff', sub: 'rgba(222,227,242,.92)', hl: '#ffffff', tint: 'light' },
@@ -4301,6 +4316,12 @@ function rcSetUnit(u) {
   toast(T(u === 'artist' ? 'Ziehe einen Artist an eine neue Stelle' : u === 'scene' ? 'Ziehe eine Szene, um sie zu verschieben' : 'Ziehe einen Kontinent, um ihn zu verschieben'));
 }
 /* Standard-Farbschema ist "Nach Lage": gilt, solange fuer diese Karte noch nichts gespeichert wurde (wird nicht selbst gespeichert) */
+/* Standard-Farbschema von Tunelands (Kontinent-Anker -> Farbe); passt zur Karte von timnook73. Auf anderen Karten ohne passenden Anker gilt "Farben nach Lage". */
+const KK_DEFCOLORS = {"The Neighbourhood": "#a052ff", "Edwin Rosen": "#59f9ff", "TV Girl": "#be30ff", "sign crushes motorist": "#6fc253", "Tame Impala": "#1cc984", "Kasi": "#43de95", "Radiohead": "#ffa1a1", "Zate": "#c27465", "Clairo": "#bf66ff", "Pastel Ghost": "#b01c95", "MXP": "#b34757", "Anri": "#dec97c", "Lyno Nine8": "#3579f0", "Videoclub": "#ff5ea1", "hkmori": "#570238", "XXXTENTACION": "#6783e6", "Nujabes": "#d6bc38", "Powfu": "#2de06c", "Joost": "#3469bf", "inverted mind": "#c2557d", "Lofi Girl": "#45f571"};
+function rcStdColors() {
+  if (!regs.some(r => KK_DEFCOLORS[rkey(r)])) { rcDefaultColors(); return; }
+  regs.forEach(r => setRegionColor(r, KK_DEFCOLORS[rkey(r)] || r.color0, false));
+}
 function rcDefaultColors() {
   const gx = regs.reduce((s, r) => s + r.cx, 0) / regs.length, gy = regs.reduce((s, r) => s + r.cy, 0) / regs.length;
   regs.forEach(r => setRegionColor(r, rgb2hex(fromHsl((Math.atan2(r.cy - gy, r.cx - gx) * 180 / Math.PI + 360) % 360 + 15, .6, .68)), false));
@@ -4325,7 +4346,7 @@ function rcCodeImport() {
   rcAdopt(o); rcSave(); location.reload();
 }
 function rcBuiltin() { try { const L = (window.__KK_CFG__ || {}).layout, c = L && (typeof L === 'object' ? L[MAPV || 'default'] : L); return c ? rcUnpack(c) : null; } catch (e) { return null; } }
-function rcInit() { let fresh = false; try { fresh = !localStorage.getItem(RC.key) && !localStorage.getItem(RC.legacy); } catch (e) { } rcLoad(); const bi = fresh ? rcBuiltin() : null; if (bi) { rcAdopt(bi); fresh = false; } rcApplySaved(); if (fresh && regs.length) rcDefaultColors(); if (RC.dropped) { RC.dropped = false; rcSave(); setTimeout(() => toast(T('Gespeicherte Positionen einer älteren Version wurden verworfen, die Farben bleiben erhalten.')), 2500); } }
+function rcInit() { let fresh = false; try { fresh = !localStorage.getItem(RC.key) && !localStorage.getItem(RC.legacy); } catch (e) { } rcLoad(); const bi = fresh ? rcBuiltin() : null; if (bi) { rcAdopt(bi); fresh = false; } rcApplySaved(); if (fresh && regs.length) rcStdColors(); if (RC.dropped) { RC.dropped = false; rcSave(); setTimeout(() => toast(T('Gespeicherte Positionen einer älteren Version wurden verworfen, die Farben bleiben erhalten.')), 2500); } }
 
 /* ---- Oberflaeche: Farbwahl je Kontinent (Einstellungen) ---- */
 function rcHTML() {
@@ -4617,7 +4638,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('fixdlg'
 (function community() {
   const cfg = window.__KK_CFG__ || {}, SOC = Object.assign({ instagram: 'https://www.instagram.com/tunelands', tiktok: 'https://www.tiktok.com/@tunelands_maps', youtube: 'https://youtube.com/@tunelands-g3m' }, cfg.social || {});
   const handle = u => { const m = String(u).match(/(?:instagram\.com\/|tiktok\.com\/|youtube\.com\/)(@?[^/?#]+)/i); return m ? (m[1][0] === '@' ? m[1] : '@' + m[1]) : ''; };
-  [['ig', 'instagram'], ['tt', 'tiktok'], ['yt', 'youtube']].forEach(([k, n]) => { const a = $('soc-' + k); if (!a) return; if (SOC[n]) { a.href = SOC[n]; $('soc-' + k + '-n').textContent = handle(SOC[n]); } else a.remove(); });
+  [['ig', 'instagram'], ['tt', 'tiktok'], ['yt', 'youtube']].forEach(([k, n]) => { const a = $('soc-' + k); if (!a) return; const q = $('qk-' + k); if (SOC[n]) { a.href = SOC[n]; $('soc-' + k + '-n').textContent = handle(SOC[n]); if (q) q.href = SOC[n]; } else { a.remove(); if (q) q.remove(); } });
   const pick = v => (v && typeof v === 'object') ? (v[LANG] || v.de || v.en || '') : (v || '');
   const surveyUrl = () => pick(cfg.survey || cfg.feedback);
   const dlg = $('community'), openDlg = on => { dlg.classList.toggle('show', on); if (on) { setMenu(false); $('soc-survey').classList.toggle('hidden', !surveyUrl()); } };
@@ -4628,7 +4649,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('fixdlg'
   const save = o => { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) { } };
   const card = $('survey'), hide = () => card.classList.add('hidden');
   function go() { const u = surveyUrl(); if (!u) return; const o = load(); o.s = 'done'; save(o); hide(); openDlg(false); window.open(u, '_blank', 'noopener'); }
-  $('soc-survey').onclick = go; $('sv-go').onclick = go;
+  $('soc-survey').onclick = go; $('sv-go').onclick = go; $('qk-sv').onclick = go; if (surveyUrl()) $('qk-sv').classList.remove('hidden');
   const later = () => { const o = load(); o.n++; o.t = Date.now(); save(o); hide(); };
   $('sv-later').onclick = later; $('sv-x').onclick = later;
   $('sv-never').onclick = () => { const o = load(); o.s = 'never'; save(o); hide(); };
@@ -4647,7 +4668,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('fixdlg'
    KLANGKARTE – Einstellungen, Designs, Ansicht-Leiste, Übersicht/Legende
    ===================================================================== */
 const SKEY = 'klangkarte-einstellungen-v2';
-const DEF = { S: JSON.parse(JSON.stringify(S)), show: JSON.parse(JSON.stringify(show)), UI: { minimap: true, legend: true, mmPos: null, timeline: true } };
+const DEF = { S: JSON.parse(JSON.stringify(S)), show: JSON.parse(JSON.stringify(show)), UI: { minimap: false, legend: false, mmPos: null, timeline: true } };
 const TRANSIENT = ['view', 'objs', 'who'];      // werden nicht gespeichert (Start immer auf der Karte)
 function loadSettings() {
   if (window.innerWidth <= 900) { UI.minimap = false; UI.legend = false; UI.timeline = false; }      // auf dem Handy standardmaessig aus
@@ -4799,7 +4820,7 @@ document.addEventListener('input', e => {
 function syncSegOnly() { document.querySelectorAll('[data-set]').forEach(g => { const k = g.dataset.set; g.querySelectorAll('button[data-v]').forEach(b => b.classList.toggle('on', String(S[k]) === b.dataset.v)); }); }
 function resetSettings() {
   Object.keys(DEF.S).forEach(k => { if (!TRANSIENT.includes(k)) S[k] = DEF.S[k]; });
-  Object.assign(show, DEF.show); UI.minimap = true; UI.legend = true; UI.mmPos = null;
+  Object.assign(show, DEF.show); UI.minimap = DEF.UI.minimap; UI.legend = DEF.UI.legend; UI.mmPos = null;
   $('minimap').classList.remove('hidden'); $('legend').classList.remove('hidden'); placeMinimap();
   applyTheme(); applyFont(); recolor(); assignValues(); rankings(); onRangeChange(); renderPresets(); applyLayout({ fit: 'force' });
   saveSettings(); syncSettingsUI(); toast('Einstellungen zurückgesetzt');
@@ -4874,9 +4895,9 @@ const PP_RANGE = { fontScale: [.8, 1.5], labelDensity: [.4, 2], regionSize: [.5,
 const PP_ENUM = { sizeCurve: ['soft', 'sqrt', 'strong'], metric: ['min', 'str'], timeMode: ['dynamic', 'fixed'], colorMode: ['region', 'heat', 'new'] };
 function ppBuilt() {
   const look = ['theme', 'font', 'fontScale', 'labelDensity', 'regionLabels', 'regionSize', 'sceneLabels', 'stars', 'glowAmt', 'sizeCurve', 'artScale', 'songScale', 'spread', 'moonScale', 'colorMode', 'linkAmt', 'rings', 'topN'];
-  const std = {}; look.forEach(k => { std[k] = DEF.S[k]; });
+  const std = {}; look.concat(['metric', 'timeMode', 'followCam', 'animSpeed', 'minMin', 'minStr']).forEach(k => { std[k] = DEF.S[k]; });
   return [
-    { id: 'std', n: 'Standard', d: 'Die ursprüngliche Darstellung mit Farben nach Lage', s: std, sh: { songs: true, links: true, labels: true }, cs: 'spectrum' },
+    { id: 'std', n: 'Standard', d: 'Das Standard-Preset von Tunelands', s: std, sh: { songs: true, links: true, labels: true }, ui: { minimap: false, legend: false }, cs: 'std' },
     { id: 'calm', n: 'Ruhig', d: 'Wenige Namen, kaum Linien, Pastellfarben', s: { labelDensity: .6, sceneLabels: false, linkAmt: .3, glowAmt: .7, stars: false, rings: false }, sh: { songs: false, links: true, labels: true }, cs: 'pastel' },
     { id: 'paper', n: 'Papier', d: 'Helles Design mit Serifenschrift', s: { theme: 'paper', font: 'serif', glowAmt: .6, stars: false }, cs: 'pastel' },
     { id: 'neon', n: 'Neon', d: 'Tiefschwarz mit starkem Leuchten und kräftigen Farben', s: { theme: 'black', glowAmt: 1.6, linkAmt: 1.3 }, cs: 'vivid' },
@@ -4915,7 +4936,8 @@ function ppApply(o) {
     if (typeof o.ui.minimap === 'boolean') UI.minimap = o.ui.minimap; if (typeof o.ui.legend === 'boolean') UI.legend = o.ui.legend;
     $('minimap').classList.toggle('hidden', !UI.minimap); $('legend').classList.toggle('hidden', !UI.legend); if (UI.minimap) { mmResize(); mmDirty = true; placeMinimap(); }
   }
-  if (o.cs && ['orig', 'spectrum', 'pastel', 'vivid'].includes(o.cs)) rcPreset(o.cs);
+  if (o.cs === 'std') { rcStdColors(); rcSave(); }
+  else if (o.cs && ['orig', 'spectrum', 'pastel', 'vivid'].includes(o.cs)) rcPreset(o.cs);
   else if (o.c) { regs.forEach(r => { const h = o.c[rkey(r)]; setRegionColor(r, /^#[0-9a-f]{6}$/i.test(h) ? h : r.color0, false); }); rcSave(); }
   applyTheme(); applyFont(); recolor(); assignValues(); rankings(); onRangeChange(); renderPresets(); applyLayout({ fit: 'force' });
   saveSettings(); syncSettingsUI(); glowDirty = true; mmDirty = true; requestDraw();
