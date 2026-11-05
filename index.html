@@ -35,6 +35,42 @@
   --btn-grad:linear-gradient(135deg,#5b82e8,#8a6be0); --btn-ink:#fff; --bar-a:#5b82e8; --bar-b:#8a6be0;
   color-scheme:light;
 }
+:root[data-theme="forest"]{
+  --bg:#07120d; --bg2:#0b1d14; --panel:rgba(10,28,19,.84); --panel-solid:#0b1d14; --line:rgba(190,255,215,.12); --line2:rgba(190,255,215,.22);
+  --accent:#86e3a6; --accent2:#ffd9a0; --bar-a:#86e3a6; --bar-b:#3f9a64; --btn-grad:linear-gradient(135deg,#7ddb9c,#8fd0ff);
+}
+:root[data-theme="dusk"]{
+  --bg:#0d0a1c; --bg2:#161030; --panel:rgba(22,15,46,.84); --panel-solid:#161030; --line:rgba(215,190,255,.12); --line2:rgba(215,190,255,.22);
+  --accent:#c4a1ff; --accent2:#ffb7c8; --bar-a:#c4a1ff; --bar-b:#7d5cc4; --btn-grad:linear-gradient(135deg,#b690ff,#ff9fd0);
+}
+:root[data-theme="wine"]{
+  --bg:#14070b; --bg2:#210c14; --panel:rgba(33,12,20,.84); --panel-solid:#210c14; --line:rgba(255,200,210,.12); --line2:rgba(255,200,210,.22);
+  --accent:#ff9db4; --accent2:#ffd0a0; --bar-a:#ff9db4; --bar-b:#b84a68; --btn-grad:linear-gradient(135deg,#ff8fa8,#ffb98f);
+}
+:root[data-theme="ember"]{
+  --bg:#120b06; --bg2:#1e130a; --panel:rgba(30,19,10,.84); --panel-solid:#1e130a; --line:rgba(255,220,170,.12); --line2:rgba(255,220,170,.22);
+  --accent:#ffb86b; --accent2:#9fd0ff; --bar-a:#ffb86b; --bar-b:#c47a2a; --btn-grad:linear-gradient(135deg,#ffb066,#ff8f8f);
+}
+:root[data-theme="slate"]{
+  --bg:#0e1114; --bg2:#171c22; --panel:rgba(23,28,34,.86); --panel-solid:#171c22; --line:rgba(200,215,235,.12); --line2:rgba(200,215,235,.22);
+  --accent:#9db4cf; --accent2:#ffc9a3; --bar-a:#9db4cf; --bar-b:#5f7a99; --btn-grad:linear-gradient(135deg,#8fb0d8,#a9a0e0);
+}
+:root[data-theme="sky"]{
+  --bg:#e3eef8; --bg2:#e3eef8; --panel:rgba(255,255,255,.88); --panel-solid:#e9f2fa; --line:rgba(30,35,55,.12); --line2:rgba(30,35,55,.24);
+  --text:#1a2030; --muted:#566080; --dim:#8a90a8; --accent:#2f6fc0; --accent2:#b0602a;
+  --w03:rgba(20,25,45,.03); --w04:rgba(20,25,45,.04); --w05:rgba(20,25,45,.05); --w07:rgba(20,25,45,.07); --w08:rgba(20,25,45,.08); --w09:rgba(20,25,45,.09); --w10:rgba(20,25,45,.10); --w12:rgba(20,25,45,.12); --w16:rgba(20,25,45,.16);
+  --scrim:rgba(235,228,230,.72); --tip-bg:rgba(255,255,255,.96); --shadow:0 10px 30px rgba(50,50,70,.2);
+  --btn-grad:linear-gradient(135deg,#2f6fc0,#8a6be0); --btn-ink:#fff; --bar-a:#2f6fc0; --bar-b:#8a6be0;
+  color-scheme:light;
+}
+:root[data-theme="rose"]{
+  --bg:#f6e6e8; --bg2:#f6e6e8; --panel:rgba(255,255,255,.88); --panel-solid:#fbeef0; --line:rgba(30,35,55,.12); --line2:rgba(30,35,55,.24);
+  --text:#1a2030; --muted:#566080; --dim:#8a90a8; --accent:#b8456a; --accent2:#3a7a9a;
+  --w03:rgba(20,25,45,.03); --w04:rgba(20,25,45,.04); --w05:rgba(20,25,45,.05); --w07:rgba(20,25,45,.07); --w08:rgba(20,25,45,.08); --w09:rgba(20,25,45,.09); --w10:rgba(20,25,45,.10); --w12:rgba(20,25,45,.12); --w16:rgba(20,25,45,.16);
+  --scrim:rgba(235,228,230,.72); --tip-bg:rgba(255,255,255,.96); --shadow:0 10px 30px rgba(50,50,70,.2);
+  --btn-grad:linear-gradient(135deg,#b8456a,#8a6be0); --btn-ink:#fff; --bar-a:#b8456a; --bar-b:#8a6be0;
+  color-scheme:light;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden;-webkit-font-smoothing:antialiased;font-size:14px}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -611,6 +647,7 @@ body.clean #quick,body:has(#caption.show) #quick{display:none !important}
 #pv-mini{bottom:calc(var(--tl-h) + 76px + var(--sib))}
 body.tl-off #pv-mini{bottom:calc(76px + var(--sib))}
 @media (max-width:900px){ body.drawer-open #quick{display:none} }
+#fixdlg .hidden{display:none}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -771,7 +808,7 @@ window.__KK_CFG__ = { beta: true, social: { instagram: 'https://www.instagram.co
   <h2>Fehler melden</h2>
   <p class="lead" id="fx-what"></p>
   <div class="fx-opts" id="fx-opts"></div>
-  <div id="fx-genre" class="fx-genre hidden"><label>Gehört in den Kontinent<select id="fx-reg"></select></label><label>Genre-Vorschlag (optional)<input id="fx-sug" type="text" maxlength="80" placeholder="z. B. Bedroom Pop" autocomplete="off"></label></div>
+  <div id="fx-genre" class="fx-genre hidden"><label id="fx-regl">Gehört in den Kontinent<select id="fx-reg"></select></label><label>Eigenes Genre (mehrere mit Komma)<input id="fx-sug" type="text" maxlength="120" placeholder="z. B. Hip-House, Dance-Pop, Pop-Rap" autocomplete="off"></label></div>
   <label class="fx-note">Anmerkung (optional)<textarea id="fx-note" rows="2" maxlength="300"></textarea></label>
   <label class="fx-chk"><input type="checkbox" id="fx-send" checked><span>Meldung an Tunelands senden<small>Öffnet eine vorbereitete E-Mail (und kopiert den Text). So kann der Fehler später für alle Karten behoben werden.</small></span></label>
   <div class="btns"><button class="btn pri" id="fx-go">Korrigieren</button><button class="btn" id="fx-cancel">Abbrechen</button></div>
@@ -854,6 +891,10 @@ const I18N_PAIRS = [
   ['Noch keine Korrekturen.', 'No corrections yet.'], ['Artist ausgeblendet', 'Artist hidden'], ['Song ausgeblendet', 'Song hidden'], ['Vorschau entfernt', 'Preview removed'],
   ['Korrigiert:', 'Fixed:'],
   ['Das Standard-Preset von Tunelands', 'The Tunelands default preset'],
+  ['Wald', 'Forest'], ['Dämmerung', 'Dusk'], ['Bordeaux', 'Bordeaux'], ['Glut', 'Ember'], ['Schiefer', 'Slate'], ['Himmel', 'Sky'], ['Rosé', 'Rosé'],
+  ['Nur diesen Artist anzeigen', 'Show only this artist'], ['Nur diesen Song anzeigen', 'Show only this song'], ['Ausnahme aufheben', 'Remove exception'], ['Ausnahme · Artist', 'Exception · Artist'], ['Ausnahme · Song', 'Exception · Song'], ['Ausnahme: bleibt sichtbar, obwohl die Szene ausgeblendet ist.', 'Exception: stays visible although the scene is hidden.'], ['Ausnahme: bleibt sichtbar, obwohl der Kontinent ausgeblendet ist.', 'Exception: stays visible although the continent is hidden.'],
+  ['Falscher Kontinent oder falsches Genre der Szene', 'Wrong continent or genre of the scene'], ['Falsches Genre', 'Wrong genre'], ['Kontinent beibehalten', 'Keep continent'], ['Eigenes Genre (mehrere mit Komma)', 'Your own genre (separate several with commas)'], ['z. B. Hip-House, Dance-Pop, Pop-Rap', 'e.g. Hip-House, Dance-Pop, Pop-Rap'],
+  ['Bitte einen Kontinent wählen oder ein Genre eingeben', 'Please choose a continent or enter a genre'], ['Eigenes Genre', 'Own genre'], ['Eigenes Genre (Song)', 'Own genre (song)'], ['Szene umbenannt', 'Scene renamed'],
   /* --- Zeitleiste --- */
   ['Zeitraum', 'Period'], ['Gesamte Zeit', 'All time'], ['Entwicklung', 'Growth'], ['Entwicklung abspielen', 'Play growth over time'], ['Pause', 'Pause'], ['Alles', 'All'], ['Letzter Tag', 'Last day'], ['7 Tage', '7 days'], ['30 Tage', '30 days'], ['90 Tage', '90 days'],
   ['Zeitraum nach Datum', 'Period by date'], ['Von', 'From'], ['Bis', 'To'], ['Datum eingeben', 'Enter a date'], ['Achse herauszoomen', 'Zoom timeline out'], ['Achse hineinzoomen (auch Mausrad oder Pinch auf der Achse)', 'Zoom timeline in (also mouse wheel or pinch on the axis)'], ['Achse nach links', 'Move timeline left'], ['Achse nach rechts', 'Move timeline right'],
@@ -1085,12 +1126,13 @@ const S = {
   view: 'map',            // map | rows | spiral
   objs: 'artists',        // artists | songs   (nur Rangliste/Spirale)
   metric: 'min',          // min | str
-  timeMode: 'fixed',      // dynamic | fixed
+  timeMode: 'dynamic',    // dynamic | fixed
   sizeCurve: 'sqrt',      // soft | sqrt | strong
   artScale: 1.1, songScale: 1.55, spread: .95, moonScale: 1,
   colorMode: 'region',    // region | heat | new
   linkAmt: 1.1, rings: true, followCam: true, animSpeed: .6,
   perf: 'balanced',
+  rowDir: 'h', gridCols: 0, gridRows: 0,     // Reihen-Ansicht: Richtung (h Reihen / v Spalten), Spalten, Zeilen (0 = automatisch)
   topN: 0, minMin: 0, minStr: 0,      // Filter: nur Top-N, Mindest-Hoerzeit (min), Mindest-Streams
   who: 'B'                            // Vergleich: B = beide, M = ich, F = Freund
 };
@@ -1106,7 +1148,14 @@ const THEMES = {
   night: { name: 'Mitternacht', ui: 'dark', base: '#070910', bg: ['#0f1424', '#080a14', '#04050a'], dust: '190,205,255', glowMode: 'lighter', glowK: 1, halo: 'rgba(5,7,13,.88)', haloS: 'rgba(4,6,12,.82)', text: '#d9deee', textB: '#f3f5fb', sub: 'rgba(222,227,242,.92)', hl: '#ffffff', tint: 'light' },
   black: { name: 'Tiefschwarz', ui: 'dark', base: '#000000', bg: ['#050507', '#020203', '#000000'], dust: '210,215,255', glowMode: 'lighter', glowK: .8, halo: 'rgba(0,0,0,.92)', haloS: 'rgba(0,0,0,.88)', text: '#dde1ee', textB: '#ffffff', sub: 'rgba(222,227,242,.92)', hl: '#ffffff', tint: 'light' },
   paper: { name: 'Papier', ui: 'light', base: '#efe8d8', bg: ['#f8f3e9', '#efe8d8', '#e3dac4'], dust: null, glowMode: 'source-over', glowK: .5, halo: 'rgba(248,243,233,.92)', haloS: 'rgba(248,243,233,.9)', text: '#2a3042', textB: '#0e1220', sub: 'rgba(40,46,64,.92)', hl: '#111522', tint: 'dark' },
-  ocean: { name: 'Ozean', ui: 'dark', base: '#062030', bg: ['#0e3a4f', '#08283a', '#041823'], dust: '160,230,255', glowMode: 'lighter', glowK: 1, halo: 'rgba(3,18,28,.88)', haloS: 'rgba(3,16,26,.84)', text: '#d6ecf5', textB: '#f1fbff', sub: 'rgba(214,236,245,.92)', hl: '#ffffff', tint: 'light' }
+  ocean: { name: 'Ozean', ui: 'dark', base: '#062030', bg: ['#0e3a4f', '#08283a', '#041823'], dust: '160,230,255', glowMode: 'lighter', glowK: 1, halo: 'rgba(3,18,28,.88)', haloS: 'rgba(3,16,26,.84)', text: '#d6ecf5', textB: '#f1fbff', sub: 'rgba(214,236,245,.92)', hl: '#ffffff', tint: 'light' },
+  forest: { name: 'Wald', ui: 'dark', base: '#07120d', bg: ['#102a1e', '#09160f', '#040a07'], dust: '170,255,200', glowMode: 'lighter', glowK: 1, halo: 'rgba(4,12,8,.88)', haloS: 'rgba(4,12,8,.82)', text: '#d9deee', textB: '#f3f5fb', sub: 'rgba(222,227,242,.92)', hl: '#ffffff', tint: 'light' },
+  dusk: { name: 'Dämmerung', ui: 'dark', base: '#0d0a1c', bg: ['#2a1a4a', '#140e2a', '#080614'], dust: '215,190,255', glowMode: 'lighter', glowK: 1, halo: 'rgba(8,5,20,.88)', haloS: 'rgba(8,5,20,.82)', text: '#d9deee', textB: '#f3f5fb', sub: 'rgba(222,227,242,.92)', hl: '#ffffff', tint: 'light' },
+  wine: { name: 'Bordeaux', ui: 'dark', base: '#14070b', bg: ['#3a1220', '#1c0911', '#0a0307'], dust: '255,200,210', glowMode: 'lighter', glowK: 1, halo: 'rgba(12,3,6,.88)', haloS: 'rgba(12,3,6,.82)', text: '#d9deee', textB: '#f3f5fb', sub: 'rgba(222,227,242,.92)', hl: '#ffffff', tint: 'light' },
+  ember: { name: 'Glut', ui: 'dark', base: '#120b06', bg: ['#33200f', '#1a1008', '#090502'], dust: '255,220,170', glowMode: 'lighter', glowK: 1, halo: 'rgba(10,6,2,.88)', haloS: 'rgba(10,6,2,.82)', text: '#d9deee', textB: '#f3f5fb', sub: 'rgba(222,227,242,.92)', hl: '#ffffff', tint: 'light' },
+  slate: { name: 'Schiefer', ui: 'dark', base: '#0e1114', bg: ['#232a33', '#14181d', '#07090b'], dust: '200,210,225', glowMode: 'lighter', glowK: 1, halo: 'rgba(7,9,11,.88)', haloS: 'rgba(7,9,11,.82)', text: '#d9deee', textB: '#f3f5fb', sub: 'rgba(222,227,242,.92)', hl: '#ffffff', tint: 'light' },
+  sky: { name: 'Himmel', ui: 'light', base: '#e3eef8', bg: ['#f2f8fd', '#e3eef8', '#cfe0ee'], dust: null, glowMode: 'source-over', glowK: .5, halo: 'rgba(242,248,253,.92)', haloS: 'rgba(242,248,253,.9)', text: '#2a3042', textB: '#0e1220', sub: 'rgba(40,46,64,.92)', hl: '#111522', tint: 'dark' },
+  rose: { name: 'Rosé', ui: 'light', base: '#f6e6e8', bg: ['#fdf3f4', '#f6e6e8', '#ebd2d6'], dust: null, glowMode: 'source-over', glowK: .5, halo: 'rgba(253,243,244,.92)', haloS: 'rgba(253,243,244,.9)', text: '#2a3042', textB: '#0e1220', sub: 'rgba(40,46,64,.92)', hl: '#111522', tint: 'dark' }
 };
 let TH = THEMES.night;
 const tint = (rgb, k) => TH.tint === 'light' ? lighten(rgb, k) : darken(rgb, k * 1.05);
@@ -1937,7 +1986,7 @@ const CURVES = { soft: { e: .38, k: Math.pow(40, .12) }, sqrt: { e: .5, k: 1 }, 
 const sizeHub = v => v <= 0 ? 0 : S.artScale * (5 + 5.2 * CURVES[S.sizeCurve].k * Math.pow(v, CURVES[S.sizeCurve].e));
 const sizeMoon = v => v <= 0 ? 0 : S.songScale * (2 + 3.6 * CURVES[S.sizeCurve].k * Math.pow(v, CURVES[S.sizeCurve].e));
 const sizeTile = v => v <= 0 ? 0 : S.songScale * .88 * (5 + 5.2 * CURVES[S.sizeCurve].k * Math.pow(v, CURVES[S.sizeCurve].e));
-const filtersOn = () => S.topN > 0 || S.minMin > 0 || S.minStr > 0;
+const filtersOn = () => S.topN > 0 || S.minMin > 0 || S.minStr > 0 || (HID.n > 0 && !HID.off);          // Ausblenden zaehlt wie ein Filter: die uebrigen Artists ruecken zusammen, die Karte bleibt ohne Luecken
 const passA = a => !isHidA(a) && (!S.topN || PATH === 'songs' || a.rk <= S.topN) && a.cm >= S.minMin && a.cs >= S.minStr;
 const passT = t => !isHidT(t) && (!S.topN || PATH !== 'songs' || t.rk <= S.topN) && t.cm >= S.minMin && t.cs >= S.minStr;
 const PADE = 8;     // Mindestabstand zwischen zwei Einheiten bei der Neuberechnung
@@ -2108,13 +2157,23 @@ function syncMoons() {
 
 /* ---------- Rangliste (Reihen) und Spirale ---------- */
 function rowsLayout(items) {
-  const gap = 8; let area = 0; items.forEach(it => { const d = 2 * it.r + gap; area += d * d; });
+  const gap = 8, n = items.length, vert = S.rowDir === 'v', C = S.gridCols | 0, R = S.gridRows | 0;
+  if (C || R) {                                                   // festes Raster: waagerecht zaehlt die Spaltenzahl, senkrecht die Zeilenzahl (die andere nur bei Auto)
+    const per = Math.max(1, vert ? (R || Math.ceil(n / C)) : (C || Math.ceil(n / R))), lines = Math.ceil(n / per);
+    const nc = vert ? lines : per, nr = vert ? per : lines, w = new Float64Array(nc), h = new Float64Array(nr);
+    items.forEach((it, i) => { const d = 2 * it.r + gap, ln = Math.floor(i / per), ps = i % per, c = vert ? ln : ps, r = vert ? ps : ln; it.gc = c; it.gr = r; if (d > w[c]) w[c] = d; if (d > h[r]) h[r] = d; });
+    const xo = new Float64Array(nc + 1), yo = new Float64Array(nr + 1);
+    for (let c = 0; c < nc; c++) xo[c + 1] = xo[c] + w[c]; for (let r = 0; r < nr; r++) yo[r + 1] = yo[r] + h[r];
+    items.forEach(it => { it.x = xo[it.gc] + w[it.gc] / 2 - xo[nc] / 2; it.y = yo[it.gr] + h[it.gr] / 2 - yo[nr] / 2; });
+    return;
+  }
+  let area = 0; items.forEach(it => { const d = 2 * it.r + gap; area += d * d; });
   const Wt = Math.max(2 * items[0].r + gap, Math.sqrt(area * 1.9));
   let x = 0, y = 0, rowH = 0, row = [];
   const flush = () => { const cy = y + rowH / 2; row.forEach(it => it.y = cy); y += rowH; row = []; x = 0; rowH = 0; };
   items.forEach(it => { const d = 2 * it.r + gap; if (x + d > Wt && row.length) flush(); if (!row.length) rowH = d; it.x = x + d / 2; x += d; row.push(it); });
   flush();
-  items.forEach(it => { it.x -= Wt / 2; it.y -= y / 2; });
+  items.forEach(it => { it.x -= Wt / 2; it.y -= y / 2; if (vert) { const t = it.x; it.x = it.y; it.y = t; } });          // senkrecht: dieselbe Anordnung gedreht (Spalte fuer Spalte)
 }
 function spiralLayout(items) {
   const B = 4096, outer = new Float64Array(B), gap = 8, TWO = 2 * Math.PI;
@@ -2312,6 +2371,9 @@ function closeDrawer() { body.classList.remove('drawer-open'); }
 function setTab(t, silent) {
   drawerTab = t; document.querySelectorAll('#drawer .tab').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   if (!silent) body.classList.add('drawer-open'); renderDrawer();
+  /* aktiven Reiter in der (seitlich scrollbaren) Leiste sichtbar halten, z. B. „Optionen“ am rechten Rand */
+  const on = document.querySelector('#drawer .tab.on'), tb = on && on.parentElement;
+  if (tb && tb.scrollWidth > tb.clientWidth) { const r = on.getBoundingClientRect(), q = tb.getBoundingClientRect(); if (r.right > q.right) tb.scrollLeft += r.right - q.right + 8; else if (r.left < q.left) tb.scrollLeft -= q.left - r.left + 8; }
 }
 function renderDrawer() {
   const st = dbody.scrollTop;
@@ -2370,7 +2432,7 @@ function artistHTML(a) {
   const pic = a.hc >= 0 ? thumbCStyle(a.hc, 84) : a.h >= 0 ? thumbHiStyle(a.h, 84) : thumbStyle(a.i, 84);
   h += '<div class="hero" style="--c:' + col + '"><div class="pic" id="hero-pic" style="' + pic + '"></div><div><h2>' + esc(a.n) + '</h2><div class="sub">Artist · Rang <b>#' + a.rk + '</b>' + (isFull() ? '' : ' im Zeitraum') + ' von ' + NA + '</div></div></div>';
   h += hideNote('a', a.i);
-  h += '<div class="chips"><span class="chip reg" style="--c:' + regs[a.r].color + '" data-go="r' + a.r + '">' + esc(regs[a.r].name) + '</span><span class="chip reg" style="--c:' + regs[a.r].color + '" data-go="s' + a.s + '">' + esc(scs[a.s].name) + '</span>' + a.g.slice(0, 6).map(g => '<span class="chip">' + esc(tagName(g)) + '</span>').join('') + '</div>';
+  h += '<div class="chips"><span class="chip reg" style="--c:' + regs[a.r].color + '" data-go="r' + a.r + '">' + esc(regs[a.r].name) + '</span><span class="chip reg" style="--c:' + regs[a.r].color + '" data-go="s' + a.s + '">' + esc(scs[a.s].name) + '</span>' + (a.gx ? a.gx : a.g.slice(0, 6).map(tagName)).map(g => '<span class="chip">' + esc(g) + '</span>').join('') + '</div>';
   h += '<div class="kpis">' + kpi('Hörzeit', fmtMin(a.cm), fmtHours(a.cm)) + kpi('Streams', fmt(a.cs), isFull() ? 'gesamt' : 'im Zeitraum') + kpi('Anteil', NF1.format(a.cm / totalRange() * 100) + ' %', 'deiner Hörzeit') + '</div>';
   h += '<div class="sect"><h3>Verlauf <em>' + (S.metric === 'str' ? 'Streams' : 'Minuten') + ' pro Monat</em></h3>' + sparkHTML(a.dy, col) + '<div class="rec" style="margin-top:8px">Erster Stream <b>' + fmtDay(a.f) + '</b> · Zuletzt <b>' + fmtDay(a.l) + '</b><br>Stärkster Monat: <b>' + peakMonth(a.dy) + '</b></div></div>';
   // Songs
@@ -2395,6 +2457,7 @@ function trackHTML(t) {
   h += '<div class="hero" style="--c:' + col + '"><div class="pic sq" id="hero-pic" style="' + (al && al.hc >= 0 ? thumbCStyle(al.hc, 84) : al && al.h >= 0 ? thumbHiStyle(al.h, 84) : thumbStyle(t.t, 84)) + '"></div><div><h2>' + esc(t.n) + '</h2><div class="sub">Song von ' + artistLinks(t) + (t.ex ? ' · <span class="chip" style="padding:0 6px">E</span>' : '') + '</div></div></div>';
   h += hideNote('k', t.i);
   if (al) h += '<div class="chips"><span class="chip reg" style="--c:' + col + '" data-go="b' + al.i + '">💿 ' + esc(al.n) + '</span><span class="chip reg" style="--c:' + regs[t.art.r].color + '" data-go="r' + t.art.r + '">' + esc(regs[t.art.r].name) + '</span></div>';
+  if (t.gx) h += '<div class="chips">' + t.gx.map(g => '<span class="chip">' + esc(g) + '</span>').join('') + '</div>';
   const avg = t.d && t.st ? Math.min(100, t.m * 60 / t.st / t.d * 100) : 0;
   h += '<div class="kpis">' + kpi('Hörzeit', fmtMin(t.cm), fmtHours(t.cm)) + kpi('Streams', fmt(t.cs), isFull() ? 'gesamt' : 'im Zeitraum') + kpi('Rang', '#' + t.rk, 'von ' + NT + ' Songs') + '</div>';
   h += '<div class="btns" style="margin-top:12px">' + (t.pv && !IS_ART ? '<button class="btn pri" data-act="play-prev" id="pv-btn">' + (audioId === t.i ? '⏸ Vorschau stoppen' : '▶ 30-Sek.-Vorschau') + '</button>' : '') + '<a class="btn' + (IS_ART || !t.pv ? ' pri' : '') + '" target="_blank" rel="noopener" href="' + spotifyUrl('track', t.sp, t.n + ' ' + t.art.n) + '">' + (IS_ART ? '▶ In Spotify anhören ↗' : 'In Spotify ↗') + '</a><button class="btn" data-act="center">Auf Karte zeigen</button><button class="btn" data-act="lk-from">Verbindung finden …</button>' + hideBtn('k', t.i) + fixBtn('k', t.i) + '</div>';
@@ -2441,7 +2504,7 @@ function sceneHTML(s) {
   let h = rangeBadge();
   h += '<div class="hero" style="--c:' + r.color + '"><div><div class="kicker" style="font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:' + r.color + ';font-weight:650">Szene · <a href="#" data-go="r' + r.id + '" style="color:' + r.color + '">' + esc(r.name) + '</a></div><h2>' + esc(s.name) + '</h2><div class="sub">' + esc(s.sub) + '</div></div></div>';
   h += hideNote('s', s.id);
-  { const hb = hideBtn('s', s.id); if (hb) h += '<div class="btns" style="margin:12px 0 2px">' + hb + '</div>'; }
+  { const hb = hideBtn('s', s.id); h += '<div class="btns" style="margin:12px 0 2px">' + hb + fixBtn('s', s.id) + '</div>'; }
   h += '<div class="kpis">' + kpi('Anteil', NF1.format(s.cm / totalRange() * 100) + ' %', 'deiner Hörzeit') + kpi('Hörzeit', fmtMin(s.cm), fmtHours(s.cm)) + kpi('Artists', fmt(s.n), tr.length + ' Songs') + '</div>';
   h += '<div class="sect"><h3>Artists</h3>' + ta.map(a => artistRow(a, ta[0] ? ta[0].cm : 1, 0)).join('') + '</div>';
   h += '<div class="sect"><h3>Top-Songs</h3>' + tr.slice(0, 8).map(t => trackRow(t, tr[0] ? tr[0].cm : 1, 0, { artist: true })).join('') + '</div>';
@@ -3655,9 +3718,11 @@ async function liveSync(manual) {
   finally { SYNC.busy = false; }
 }
 function syncStart() { if (SYNC.timer) return; SYNC.timer = setInterval(() => { if (LIVE.on && !document.hidden) liveSync(false); }, 75000); }
-function setLive(on) {
+const liveWanted = () => { try { return localStorage.getItem('kk-live') !== '0'; } catch (e) { return true; } };          // Standard: an, bis man ihn selbst ausschaltet
+function setLive(on, quiet) {
+  try { localStorage.setItem('kk-live', on ? '1' : '0'); } catch (e) { }
   LIVE.on = on; $('t-live').classList.toggle('on', on); document.body.classList.toggle('live-on', on); liveCard();
-  if (on) { liveIndex(); LIVE.err = 0; liveRender(); livePoll(); LIVE.tick = setInterval(liveTick, 500); toast('Live-Modus an'); liveSync(false); syncStart(); }
+  if (on) { liveIndex(); LIVE.err = 0; liveRender(); livePoll(); LIVE.tick = setInterval(liveTick, 500); if (!quiet) toast('Live-Modus an'); liveSync(false); syncStart(); }
   else { clearTimeout(LIVE.timer); clearInterval(LIVE.tick); LIVE.cur = null; liveRender(); toast('Live-Modus aus'); }
   requestDraw();
 }
@@ -4376,14 +4441,16 @@ document.addEventListener('click', e => {
    Nichts wird gespeichert: Nach dem Neuladen ist wieder alles da.
    Ausgeblendete Artists/Songs fallen über passA/passT aus dem Layout; die Karte behält ihre Plätze (Lücken), solange kein Filter aktiv ist.
    ===================================================================== */
-const HID = { r: new Set(), s: new Set(), a: new Set(), k: new Set(), n: 0, off: false };      // Kontinent, Szene, Artist, Song (Nummern wie bei sel); off = pausiert (Kontinente verschieben)
+const HID = { r: new Set(), s: new Set(), a: new Set(), k: new Set(), x: new Set(), y: new Set(), yA: new Set(), n: 0, off: false };      // Kontinent, Szene, Artist, Song (Nummern wie bei sel); x/y = Ausnahmen: Artist/Song bleibt sichtbar, obwohl sein Kontinent/seine Szene (bzw. sein Artist) ausgeblendet ist; yA = Artists mit Song-Ausnahme; off = pausiert (Kontinente verschieben)
 const FX = { a: new Set(), k: new Set(), n: 0 };      // dauerhaft ausgeblendet durch "Fehler melden" (03h_fix.js): gelten wie HID, werden aber gespeichert und zaehlen nicht in der Pille
 const HID_ORDER = ['r', 's', 'a', 'k'];
-const HID_LAB = { r: 'Kontinent', s: 'Szene', a: 'Artist', k: 'Song' };
+const HID_LAB = { r: 'Kontinent', s: 'Szene', a: 'Artist', k: 'Song', x: 'Artist', y: 'Song' };
 const HID_VIA = { r: 'Ausgeblendet über den Kontinent.', s: 'Ausgeblendet über die Szene.', a: 'Ausgeblendet über den Artist.', k: 'Ausgeblendet über den Song.' };
+/* Gruppe (Kontinent/Szene) blendet den Artist aus, sofern keine Ausnahme gilt */
+const grpHid = a => (HID.r.has(a.r) || HID.s.has(a.s)) && !HID.x.has(a.i) && !HID.yA.has(a.i);
 const hidTotal = () => HID.r.size + HID.s.size + HID.a.size + HID.k.size;
-const isHidA = a => (HID.n > 0 || FX.n > 0) && !HID.off && (HID.r.has(a.r) || HID.s.has(a.s) || HID.a.has(a.i) || FX.a.has(a.i) || (a.k === 1 && (HID.k.has(a.tr[0]) || FX.k.has(a.tr[0]))));
-const isHidT = t => (HID.n > 0 || FX.n > 0) && !HID.off && (HID.k.has(t.i) || FX.k.has(t.i) || isHidA(art[t.p]));
+const isHidA = a => (HID.n > 0 || FX.n > 0) && !HID.off && (grpHid(a) || HID.a.has(a.i) || FX.a.has(a.i) || (a.k === 1 && (HID.k.has(a.tr[0]) || FX.k.has(a.tr[0]))));
+const isHidT = t => (HID.n > 0 || FX.n > 0) && !HID.off && (HID.k.has(t.i) || FX.k.has(t.i) || isHidA(art[t.p]) || (HID.yA.has(t.p) && !HID.y.has(t.i) && !HID.x.has(t.p) && (HID.r.has(art[t.p].r) || HID.s.has(art[t.p].s))));
 /* Was blendet das Element aus? {t, i} des Auslösers (das Element selbst oder sein Szene/Kontinent/Artist), sonst null */
 function hideCause(t, i) {
   if ((!HID.n && !FX.n) || HID.off) return null;
@@ -4395,23 +4462,33 @@ function hideCause(t, i) {
     if (HID.a.has(i)) return { t, i };
     if (a.k === 1 && FX.k.has(a.tr[0])) return { t: 'k', i: a.tr[0], fx: 1 };
     if (a.k === 1 && HID.k.has(a.tr[0])) return { t: 'k', i: a.tr[0] };
+    if (HID.x.has(i) || HID.yA.has(i)) return null;
     if (HID.s.has(a.s)) return { t: 's', i: a.s };
     return HID.r.has(a.r) ? { t: 'r', i: a.r } : null;
   }
-  if (t === 'k') return FX.k.has(i) ? { t, i, fx: 1 } : HID.k.has(i) ? { t, i } : hideCause('a', trk[i].p);
+  if (t === 'k') {
+    if (FX.k.has(i)) return { t, i, fx: 1 }; if (HID.k.has(i)) return { t, i };
+    const p = trk[i].p, a = art[p];
+    if (HID.y.has(i)) return FX.a.has(p) || HID.a.has(p) ? hideCause('a', p) : null;           // Ausnahme: nur dieser Song bleibt sichtbar
+    if (HID.yA.has(p) && !HID.x.has(p) && (HID.r.has(a.r) || HID.s.has(a.s))) return HID.s.has(a.s) ? { t: 's', i: a.s } : { t: 'r', i: a.r };
+    return hideCause('a', p);
+  }
   return null;
 }
 function hideIs(t, i) { return !!hideCause(t, i); }
-const hideName = (t, i) => t === 'r' ? regs[i].name : t === 's' ? scs[i].name : t === 'a' ? art[i].n : trk[i].n;
+const hideName = (t, i) => t === 'r' ? regs[i].name : t === 's' ? scs[i].name : (t === 'a' || t === 'x') ? art[i].n : trk[i].n;
 
 /* ---------- Ändern ---------- */
 function hideSet(t, i, on) {
-  const set = HID[t]; if (!(set instanceof Set)) return;
+  const set = HID[t]; if (!(set instanceof Set) || t === 'yA') return;
   const was = set.has(i); if (on == null) on = !was; if (on === was) return;
   if (on) set.add(i); else set.delete(i);
+  if (on && t === 'a') HID.x.delete(i);                       // direkt ausgeblendet: eine fruehere Ausnahme gilt nicht mehr
+  if (on && t === 'k') HID.y.delete(i);
+  if (t === 'y') { const p = trk[i].p; if (on) HID.yA.add(p); else if (!art[p].tr.some(k => HID.y.has(k))) HID.yA.delete(p); }
   hideApply();
 }
-function hideClear() { if (!hidTotal()) return; HID_ORDER.forEach(t => HID[t].clear()); hideApply(); }
+function hideClear() { if (!hidTotal() && !HID.x.size && !HID.y.size) return; HID_ORDER.concat(['x', 'y', 'yA']).forEach(t => HID[t].clear()); hideApply(); }
 /* Beim Verschieben der Kontinente ist alles sichtbar (sonst stoßen sichtbare Artists an unsichtbare) */
 function hidePause(on) { on = !!on; if (HID.off === on) return; HID.off = on; if (hidTotal() || FX.n) hideApply(); }
 function hideApply() {
@@ -4432,24 +4509,30 @@ function hideUI() {
 /* ---------- Bausteine für Detailansichten ---------- */
 const hideBtn = (t, i) => hideCause(t, i) ? '' : '<button class="btn" data-hide="' + t + i + '">' + HID_LAB[t] + ' ausblenden</button>';
 function hideNote(t, i) {
-  const c = hideCause(t, i); if (!c) return '';
+  const c = hideCause(t, i);
+  if (!c) {                                                       // sichtbar trotz ausgeblendetem Kontinent/Szene: Ausnahme anzeigen
+    const a = t === 'a' ? art[i] : t === 'k' ? art[trk[i].p] : null;
+    if (a && !HID.off && (HID.r.has(a.r) || HID.s.has(a.s)) && (t === 'a' ? HID.x.has(i) : HID.y.has(i))) return '<div class="hid-note"><span>Ausnahme: bleibt sichtbar, obwohl ' + (HID.s.has(a.s) ? 'die Szene' : 'der Kontinent') + ' ausgeblendet ist.</span><button class="btn" data-hide="' + (t === 'a' ? 'x' : 'y') + i + '">Ausnahme aufheben</button></div>';
+    return '';
+  }
   if (c.fx) return '<div class="hid-note"><span>' + (c.t === t && c.i === i ? 'Korrigiert: nicht auf der Karte.' : HID_VIA[c.t]) + '</span><button class="btn" data-fix="undo:' + c.t + c.i + '">Rückgängig</button></div>';
-  const own = c.t === t && c.i === i;
-  return '<div class="hid-note"><span>' + (own ? 'Ausgeblendet: nicht auf der Karte und nicht im Export.' : HID_VIA[c.t]) + '</span><button class="btn" data-hide="' + c.t + c.i + '">' + HID_LAB[c.t] + ' wieder einblenden</button></div>';
+  const own = c.t === t && c.i === i, viaGrp = (t === 'a' || t === 'k') && (c.t === 'r' || c.t === 's') || (t === 'k' && c.t === 'a');
+  const ex = viaGrp ? '<button class="btn" data-hide="' + (t === 'a' ? 'x' : 'y') + i + '">' + (t === 'a' ? 'Nur diesen Artist anzeigen' : 'Nur diesen Song anzeigen') + '</button>' : '';
+  return '<div class="hid-note"><span>' + (own ? 'Ausgeblendet: nicht auf der Karte und nicht im Export.' : HID_VIA[c.t]) + '</span><button class="btn" data-hide="' + c.t + c.i + '">' + HID_LAB[c.t] + ' wieder einblenden</button>' + ex + '</div>';
 }
 
 /* ---------- Einstellungen: Suchen, Liste, Alles einblenden ---------- */
 function hideRowHTML(t, i) {
   const direct = HID[t].has(i), c = direct ? null : hideCause(t, i);
   let ctx = '';
-  if (t === 'a') ctx = art[i].reg.name; else if (t === 's') ctx = regs[scs[i].reg].name; else if (t === 'k') ctx = trk[i].a.map(x => art[x].n).join(', ');
-  const act = direct ? '<button class="btn hid-b" data-hide="' + t + i + '">Wieder einblenden</button>'
+  if (t === 'a' || t === 'x') ctx = art[t === 'x' ? i : i].reg.name; else if (t === 's') ctx = regs[scs[i].reg].name; else if (t === 'k' || t === 'y') ctx = trk[i].a.map(x => art[x].n).join(', ');
+  const act = direct ? '<button class="btn hid-b" data-hide="' + t + i + '">' + (t === 'x' || t === 'y' ? 'Ausnahme aufheben' : 'Wieder einblenden') + '</button>'
     : c ? '<span class="hid-via">' + HID_VIA[c.t] + '</span>'
       : '<button class="btn hid-b" data-hide="' + t + i + '">Ausblenden</button>';
-  return '<div class="hid-row"><div class="hid-t"><span class="hid-k">' + HID_LAB[t] + '</span><b>' + esc(hideName(t, i)) + '</b>' + (ctx ? '<small>' + esc(ctx) + '</small>' : '') + '</div>' + act + '</div>';
+  return '<div class="hid-row"><div class="hid-t"><span class="hid-k">' + (t === 'x' || t === 'y' ? 'Ausnahme · ' : '') + HID_LAB[t] + '</span><b>' + esc(hideName(t, i)) + '</b>' + (ctx ? '<small>' + esc(ctx) + '</small>' : '') + '</div>' + act + '</div>';
 }
 function hideListHTML() {
-  let rows = ''; HID_ORDER.forEach(t => HID[t].forEach(i => { rows += hideRowHTML(t, i); }));
+  let rows = ''; HID_ORDER.concat(['x', 'y']).forEach(t => HID[t].forEach(i => { rows += hideRowHTML(t, i); }));
   return rows ? rows + '<div class="btns"><button class="btn" data-hide="all">Alles wieder einblenden</button></div>' : '<div class="muted hid-none">Noch nichts ausgeblendet.</div>';
 }
 function hideFindHTML(q) {
@@ -4492,22 +4575,24 @@ hideUI();
    (E-Mail oder Formular aus config.js: reportMail, reportUrl); gesammelte Meldungen lassen sich kopieren. Die Meldungen sollen spaeter fuer alle Karten geprueft werden.
    ===================================================================== */
 const FXKEY = 'kk-fix:' + HUD.user;
-const FXS = { a: [], k: [], pv: [], mv: {}, off: {}, rep: [] };          // gespeichert: Schluessel (Spotify-ID oder Name) der korrigierten Artists/Songs, Verschiebungen { artist: kontinent-schluessel }, Meldungen
+const FXS = { a: [], k: [], pv: [], mv: {}, off: {}, sv: {}, gn: {}, rep: [] };          // gespeichert: Schluessel (Spotify-ID oder Name) der korrigierten Artists/Songs, Verschiebungen { artist: kontinent-schluessel }, Meldungen
 const fxKA = a => a.sp || ('n:' + a.n), fxKT = t => t.sp || ('n:' + t.n + '|' + (t.art ? t.art.n : ''));
-const FX_BY = { a: new Map(), k: new Map() };
-art.forEach(a => FX_BY.a.set(fxKA(a), a.i)); trk.forEach(t => FX_BY.k.set(fxKT(t), t.i));
+const fxKS = s => 'sc:' + (s.n0 != null ? s.n0 : s.de) + '|' + rkey(regs[s.r0 != null ? s.r0 : s.reg]);          // Szenen: Originalname + urspruenglicher Kontinent
+const FX_BY = { a: new Map(), k: new Map(), s: new Map() };
+art.forEach(a => FX_BY.a.set(fxKA(a), a.i)); trk.forEach(t => FX_BY.k.set(fxKT(t), t.i)); scs.forEach(s => FX_BY.s.set(fxKS(s), s.id));
 function fxSave() { try { localStorage.setItem(FXKEY, JSON.stringify(FXS)); } catch (e) { } }
 function fxCount() { FX.n = FX.a.size + FX.k.size; }
 /* Zuordnung eines Artists zu einem anderen Kontinent (nur Daten: Mitglieder, Szene, Farbe, Summen) */
-function fxAssign(a, newR) {
+function fxAssign(a, newR, keepScene) {
   const old = a.r; if (old === newR || !regs[newR]) return false;
   const ro = regs[old], rn = regs[newR]; if (a.r0 == null) { a.r0 = a.r; a.s0 = a.s; a.px00 = a.px0; a.py00 = a.py0; }
   const rm = (arr, v) => { const k = arr.indexOf(v); if (k >= 0) arr.splice(k, 1); };
-  rm(ro.members, a.i); rm(scs[a.s].members, a.i);
+  rm(ro.members, a.i); if (!keepScene) rm(scs[a.s].members, a.i);
   let best = -1, bd = 1e18; scs.forEach((s, si) => { if (s.reg !== newR) return; const d = Math.hypot(s.bcx - a.bx, s.bcy - a.by); if (d < bd) { bd = d; best = si; } });
-  const si = best >= 0 ? best : a.s, sOld = scs[a.s];
-  sOld.n = Math.max(0, sOld.n - 1); ro.n = Math.max(0, ro.n - 1); scs[si].n++; rn.n++;
-  a.r = newR; a.reg = rn; a.s = si; a.scn = scs[si]; rn.members.push(a.i); scs[si].members.push(a.i);
+  const si = !keepScene && best >= 0 ? best : a.s, sOld = scs[a.s];
+  if (!keepScene) { sOld.n = Math.max(0, sOld.n - 1); scs[si].n++; }
+  ro.n = Math.max(0, ro.n - 1); rn.n++;
+  a.r = newR; a.reg = rn; a.s = si; a.scn = scs[si]; rn.members.push(a.i); if (!keepScene) scs[si].members.push(a.i);
   const ho = toHsl(ro.rgbO), hn = toHsl(rn.rgbO), ha = toHsl(a.rgbOrig); a.rgbOrig = fromHsl(hn.h + (ha.h - ho.h), ha.s, ha.l);       // Farbton relativ zum neuen Kontinent
   setRegionColor(rn, rn.color, false);
   if (newR === a.r0) { a.px0 = a.px00; a.py0 = a.py00; }                                     // zurueck im Ursprungskontinent: Ausgangsposition im Grundlayout wieder gueltig
@@ -4523,6 +4608,42 @@ function fxLand(a) {
   if (a.r === a.r0) { delete FXS.off[k]; return; }
   const c = fxCen(a.reg, a.i, true); FXS.off[k] = [Math.round(a.bx - c[0]), Math.round(a.by - c[1])]; fxRebase(a, FXS.off[k]); delete RC.opos[a.i];
 }
+/* Ganze Szene in einen anderen Kontinent: alle Mitglieder wechseln mit, die Szene wandert in die Liste des Zielkontinents */
+function fxAssignScene(s, newR) {
+  const old = s.reg; if (old === newR || !regs[newR]) return false;
+  if (s.r0 == null) s.r0 = old;
+  const rm = (arr, v) => { const k = arr.indexOf(v); if (k >= 0) arr.splice(k, 1); };
+  rm(regs[old].sc, s.id); regs[newR].sc.push(s.id); s.reg = newR;
+  s.members.slice().forEach(i => fxAssign(art[i], newR, true));
+  s.rgb = regs[newR].rgb; return true;
+}
+function fxFlyGroup(s, newR, done) {
+  const st = RSIM; if (st.on) { rcSimRun(1200); if (st.on) { rcSimStop(); rcApply(); rcSimFinish(); } }
+  const mem = s.members.slice(); if (!mem.length) { if (done) done(); return; }
+  let cx = 0, cy = 0, w = 0; mem.forEach(i => { const a = art[i], q = a.bF * a.bF; cx += a.bx * q; cy += a.by * q; w += q; }); cx /= w; cy /= w;
+  const inS = new Set(mem); let tgt = null, bd = 1e18; regs[newR].members.forEach(j => { if (inS.has(j)) return; const b = art[j], d = Math.hypot(b.bx - cx, b.by - cy); if (d < bd) { bd = d; tgt = b; } });
+  if (!tgt) { if (done) done(); return; }
+  if (RC.edit) rcEdit(false);
+  rcSimStop(); rcGeo(); rcSimInit(mem); rcSetGroup(RSIM.R - 1, 'scene'); RSIM.on = true;
+  RSIM.hx = tgt.bx - cx; RSIM.hy = tgt.by - cy; RSIM.release = true; RSIM.done = () => { mem.forEach(i => fxLand(art[i])); fxSave(); rcSave(); if (done) done(); };
+  rcSimLoop();
+}
+function fxMoveScene(s, newR) {
+  const k = fxKS(s), regKey = rkey(regs[newR]);
+  if (!fxAssignScene(s, newR)) return;
+  if (s.r0 === newR) delete FXS.sv[k]; else FXS.sv[k] = regKey;
+  fxSave(); fxRefresh(); fxFlyGroup(s, newR, () => { fxRefresh(); applyLayout({ fit: false }); if (drawerTab === 'detail' || drawerTab === 'settings') renderDrawer(); });
+}
+/* Eigenes Genre: Artist und Song zeigen den Text statt der Tags, eine Szene bekommt ihn als Namen (Komma-getrennt) */
+const fxTags = txt => String(txt).split(',').map(x => x.trim()).filter(Boolean).slice(0, 6);
+function fxGenreKey(t, o) { return t === 'a' ? 'a:' + fxKA(o) : t === 'k' ? 'k:' + fxKT(o) : 's:' + fxKS(o); }
+function fxGenreSet(t, o, txt, save) {
+  const key = fxGenreKey(t, o);
+  if (txt) FXS.gn[key] = txt; else delete FXS.gn[key];
+  if (t === 's') { if (txt) { if (o.n0 == null) { o.n0 = o.de; o.en0 = o.en; } o.name = txt; o.en = ''; } else if (o.n0 != null) { o.name = o.n0; o.en = o.en0; } relines(); glowDirty = true; mmDirty = true; }
+  else { if (txt) o.gx = fxTags(txt); else delete o.gx; }
+  if (save) { fxSave(); requestDraw(); if (drawerTab === 'detail' || drawerTab === 'settings') renderDrawer(); }
+}
 function fxRefresh() { recompute(); rankings(); rcGeo(); updateRegionGeom(); rcColorsApplied(); }
 /* Feste Korrekturen fuer eine bestimmte Karte (config.js: globalFix { benutzername: { hideArtists: ['Name'] } }), z. B. wenn stats.fm einem Artist fremde Streams zuordnet; nicht rueckgaengig machbar */
 const FXG = new Set();
@@ -4535,12 +4656,14 @@ const FXG = new Set();
   try {
     const o = JSON.parse(localStorage.getItem(FXKEY) || 'null'); if (!o) return;
     ['a', 'k', 'pv'].forEach(k => { FXS[k] = Array.isArray(o[k]) ? o[k].filter(x => typeof x === 'string') : []; });
-    FXS.mv = o.mv && typeof o.mv === 'object' ? o.mv : {}; FXS.off = o.off && typeof o.off === 'object' ? o.off : {}; FXS.rep = Array.isArray(o.rep) ? o.rep.slice(-200) : [];
+    FXS.mv = o.mv && typeof o.mv === 'object' ? o.mv : {}; FXS.off = o.off && typeof o.off === 'object' ? o.off : {}; FXS.sv = o.sv && typeof o.sv === 'object' ? o.sv : {}; FXS.gn = o.gn && typeof o.gn === 'object' ? o.gn : {}; FXS.rep = Array.isArray(o.rep) ? o.rep.slice(-200) : [];
   } catch (e) { return; }
   FXS.a.forEach(k => { if (FX_BY.a.has(k)) FX.a.add(FX_BY.a.get(k)); });
   FXS.k.forEach(k => { if (FX_BY.k.has(k)) FX.k.add(FX_BY.k.get(k)); });
   FXS.pv.forEach(k => { const t = FX_BY.k.has(k) ? trk[FX_BY.k.get(k)] : null; if (t && t.pv) { t.pv0 = t.pv; t.pv = ''; } });
   Object.keys(FXS.mv).forEach(k => { const a = FX_BY.a.has(k) ? art[FX_BY.a.get(k)] : null, r = regs.find(r => rkey(r) === FXS.mv[k]); if (a && r && fxAssign(a, r.id) && FXS.off[k]) fxRebase(a, FXS.off[k]); });
+  Object.keys(FXS.sv).forEach(k => { const s = FX_BY.s.has(k) ? scs[FX_BY.s.get(k)] : null, r = regs.find(r => rkey(r) === FXS.sv[k]); if (s && r && fxAssignScene(s, r.id)) s.members.forEach(i => { const o = FXS.off[fxKA(art[i])]; if (o) fxRebase(art[i], o); }); });
+  Object.keys(FXS.gn).forEach(k => { const t = k[0], key = k.slice(2), o = t === 'a' ? (FX_BY.a.has(key) ? art[FX_BY.a.get(key)] : null) : t === 'k' ? (FX_BY.k.has(key) ? trk[FX_BY.k.get(key)] : null) : (FX_BY.s.has(key) ? scs[FX_BY.s.get(key)] : null); if (o) fxGenreSet(t, o, FXS.gn[k], false); });
   rcGeo(); fxCount();
 })();
 /* Verschieben mit der Simulation: der Artist fliegt zum naechsten Mitglied des Zielkontinents, die Nachbarn weichen aus */
@@ -4562,7 +4685,7 @@ function fxMoveTo(a, newR) {
 /* ---------- Dialog ---------- */
 function fixBtn(t, i) { return '<button class="btn" data-fix="' + t + i + '">Fehler melden</button>'; }
 function fxMailText(rep) {
-  return ['Tunelands – Fehlermeldung', 'Typ: ' + rep.kind + ' (' + (rep.t === 'a' ? 'Artist' : 'Song') + ')', (rep.t === 'a' ? 'Artist: ' : 'Song: ') + rep.name + (rep.by ? ' von ' + rep.by : ''), rep.reg ? 'Kontinent auf meiner Karte: ' + rep.reg : '', rep.to ? 'Vorschlag Kontinent: ' + rep.to : '', rep.suggest ? 'Vorschlag Genre: ' + rep.suggest : '', rep.note ? 'Anmerkung: ' + rep.note : '', 'ID: ' + rep.id, 'Sprache: ' + LANG].filter(Boolean).join('\n');
+  return ['Tunelands – Fehlermeldung', 'Typ: ' + rep.kind + ' (' + ({ a: 'Artist', k: 'Song', s: 'Szene' })[rep.t] + ')', ({ a: 'Artist: ', k: 'Song: ', s: 'Szene: ' })[rep.t] + rep.name + (rep.by ? ' von ' + rep.by : ''), rep.reg ? 'Kontinent auf meiner Karte: ' + rep.reg : '', rep.to ? 'Vorschlag Kontinent: ' + rep.to : '', rep.suggest ? 'Eigenes Genre/Vorschlag: ' + rep.suggest : '', rep.note ? 'Anmerkung: ' + rep.note : '', 'ID: ' + rep.id, 'Sprache: ' + LANG].filter(Boolean).join('\n');
 }
 function fxSend(rep) {
   const cfg = window.__KK_CFG__ || {}, txt = fxMailText(rep);
@@ -4574,23 +4697,31 @@ function fxSend(rep) {
 }
 let fxCur = null;
 function fxOpen(t, i) {
-  fxCur = { t, i }; const el = $('fixdlg'), isA = t === 'a', o = isA ? art[i] : trk[i];
-  const opts = isA ? [['genre', 'Falscher Kontinent oder falsches Genre'], ['hide', 'Gehört nicht auf meine Karte (z. B. falscher Song zugeordnet)'], ['other', 'Etwas anderes']]
-    : [['preview', 'Die Vorschau gehört nicht zu diesem Song'], ['hide', 'Diesen Song habe ich nie gehört (falsch zugeordnet)'], ['other', 'Etwas anderes']];
-  if (!isA && !o.pv) opts.shift();
-  $('fx-what').innerHTML = (isA ? 'Artist' : 'Song') + ' <b>' + esc(o.n) + '</b>' + (isA ? '' : ' <span>' + esc(o.a.map(x => art[x].n).join(', ')) + '</span>');
+  fxCur = { t, i }; const el = $('fixdlg'), isA = t === 'a', isS = t === 's', o = isA ? art[i] : isS ? scs[i] : trk[i];
+  const genreLab = isS ? 'Falscher Kontinent oder falsches Genre der Szene' : isA ? 'Falscher Kontinent oder falsches Genre' : 'Falsches Genre';
+  let opts;
+  if (isA) opts = [['genre', genreLab], ['hide', 'Gehört nicht auf meine Karte (z. B. falscher Song zugeordnet)'], ['other', 'Etwas anderes']];
+  else if (isS) opts = [['genre', genreLab], ['other', 'Etwas anderes']];
+  else { opts = [['genre', genreLab], ['preview', 'Die Vorschau gehört nicht zu diesem Song'], ['hide', 'Diesen Song habe ich nie gehört (falsch zugeordnet)'], ['other', 'Etwas anderes']]; if (!o.pv) opts.splice(1, 1); }
+  $('fx-what').innerHTML = (isA ? 'Artist' : isS ? 'Szene' : 'Song') + ' <b>' + esc(o.n || o.name) + '</b>' + (isA || isS ? (isS ? ' <span>' + esc(regs[o.reg].name) + '</span>' : '') : ' <span>' + esc(o.a.map(x => art[x].n).join(', ')) + '</span>');
   $('fx-opts').innerHTML = opts.map((p, k) => '<label class="fx-opt"><input type="radio" name="fx-kind" value="' + p[0] + '"' + (k === 0 ? ' checked' : '') + '><span>' + p[1] + '</span></label>').join('');
-  $('fx-reg').innerHTML = '<option value="">' + esc(T('Bitte wählen …')) + '</option>' + regs.filter(r => r.id !== (isA ? o.r : -1)).sort((x, y) => y.cm - x.cm).map(r => '<option value="' + r.id + '">' + esc(r.name) + '</option>').join('');
-  $('fx-sug').value = ''; $('fx-note').value = ''; $('fx-send').checked = true; fxSync(); el.classList.add('show');
+  const cur = isA ? o.r : isS ? o.reg : -1;
+  $('fx-reg').innerHTML = '<option value="">' + esc(T('Kontinent beibehalten')) + '</option>' + regs.filter(r => r.id !== cur).sort((x, y) => y.cm - x.cm).map(r => '<option value="' + r.id + '">' + esc(r.name) + '</option>').join('');
+  $('fx-regl').classList.toggle('hidden', t === 'k');
+  $('fx-sug').value = (isA ? o.gx : t === 'k' ? o.gx : null) ? (isA || t === 'k' ? o.gx.join(', ') : '') : ''; $('fx-note').value = ''; $('fx-send').checked = true; fxSync(); el.classList.add('show');
 }
-function fxSync() { const k = (document.querySelector('input[name="fx-kind"]:checked') || {}).value; $('fx-genre').classList.toggle('hidden', !(fxCur && fxCur.t === 'a' && k === 'genre')); }
+function fxSync() { const k = (document.querySelector('input[name="fx-kind"]:checked') || {}).value; $('fx-genre').classList.toggle('hidden', !(fxCur && k === 'genre')); }
 function fxClose() { $('fixdlg').classList.remove('show'); fxCur = null; }
 function fxApply() {
-  if (!fxCur) return; const { t, i } = fxCur, kind = (document.querySelector('input[name="fx-kind"]:checked') || {}).value, isA = t === 'a', o = isA ? art[i] : trk[i];
-  const rep = { id: Date.now().toString(36), d: new Date().toISOString().slice(0, 10), t, kind: ({ genre: 'Falscher Kontinent/Genre', hide: 'Gehört nicht auf die Karte', preview: 'Falsche Vorschau', other: 'Sonstiges' })[kind], name: o.n, by: isA ? '' : o.a.map(x => art[x].n).join(', '), reg: isA ? o.reg.name : o.art.reg.name, suggest: $('fx-sug').value.trim().slice(0, 80), note: $('fx-note').value.trim().slice(0, 300), to: '' };
+  if (!fxCur) return; const { t, i } = fxCur, kind = (document.querySelector('input[name="fx-kind"]:checked') || {}).value, isA = t === 'a', isS = t === 's', o = isA ? art[i] : isS ? scs[i] : trk[i];
+  const rep = { id: Date.now().toString(36), d: new Date().toISOString().slice(0, 10), t, kind: ({ genre: 'Falscher Kontinent/Genre', hide: 'Gehört nicht auf die Karte', preview: 'Falsche Vorschau', other: 'Sonstiges' })[kind], name: isS ? o.name : o.n, by: t === 'k' ? o.a.map(x => art[x].n).join(', ') : '', reg: isA ? o.reg.name : isS ? regs[o.reg].name : o.art.reg.name, suggest: $('fx-sug').value.trim().slice(0, 120), note: $('fx-note').value.trim().slice(0, 300), to: '' };
   if (kind === 'genre') {
-    const r = +$('fx-reg').value; if (!$('fx-reg').value) { toast('Bitte einen Kontinent wählen'); return; }
-    rep.to = regs[r].name; fxClose(); fxMoveTo(o, r); toast(T('Korrigiert:') + ' ' + o.n + ' → ' + regs[r].name);
+    const rv = t === 'k' ? '' : $('fx-reg').value, txt = $('fx-sug').value.trim().slice(0, 120);
+    if (!rv && !txt) { toast('Bitte einen Kontinent wählen oder ein Genre eingeben'); return; }
+    fxClose(); const nm = rep.name;
+    if (txt) fxGenreSet(t, o, txt, true);
+    if (rv) { const r = +rv; rep.to = regs[r].name; if (isA) fxMoveTo(o, r); else fxMoveScene(o, r); toast(T('Korrigiert:') + ' ' + nm + ' → ' + regs[r].name); }
+    else toast(T('Korrigiert:') + ' ' + nm + ' → ' + txt);
   } else if (kind === 'hide') {
     fxClose(); if (isA) { FXS.a.push(fxKA(o)); FX.a.add(i); } else { FXS.k.push(fxKT(o)); FX.k.add(i); }
     fxCount(); fxSave(); hideApply(); toast('Korrigiert: nicht mehr auf der Karte');
@@ -4605,6 +4736,10 @@ function fxUndo(kind, id) {
   else if (kind === 'k') { const t = trk[id]; FX.k.delete(id); FXS.k = FXS.k.filter(k => k !== fxKT(t)); }
   else if (kind === 'p') { const t = trk[id]; if (t.pv0) { t.pv = t.pv0; } FXS.pv = FXS.pv.filter(k => k !== fxKT(t)); }
   else if (kind === 'm') { const a = art[id]; if (a.r0 != null) fxMoveTo(a, a.r0); return; }
+  else if (kind === 'c') { const s = scs[id]; if (s.r0 != null) fxMoveScene(s, s.r0); return; }
+  else if (kind === 'n') { fxGenreSet('a', art[id], '', true); return; }
+  else if (kind === 'q') { fxGenreSet('k', trk[id], '', true); return; }
+  else if (kind === 'z') { fxGenreSet('s', scs[id], '', true); return; }
   fxCount(); fxSave(); hideApply(); if (drawerTab === 'detail') renderDrawer();
 }
 /* ---------- Einstellungen: Liste der Korrekturen ---------- */
@@ -4613,7 +4748,9 @@ function fixSettingsHTML() {
   FX.a.forEach(i => { if (!FXG.has(i)) rows.push(['Artist ausgeblendet', art[i].n, '', 'a' + i]); });
   FX.k.forEach(i => rows.push(['Song ausgeblendet', trk[i].n, trk[i].a.map(x => art[x].n).join(', '), 'k' + i]));
   trk.forEach(t => { if (t.pv0 && !t.pv) rows.push(['Vorschau entfernt', t.n, t.a.map(x => art[x].n).join(', '), 'p' + t.i]); });
-  art.forEach(a => { if (a.r0 != null && a.r !== a.r0) rows.push(['Verschoben nach ' + a.reg.name, a.n, 'zuvor ' + regs[a.r0].name, 'm' + a.i]); });
+  art.forEach(a => { const s = scs[a.s]; if (a.r0 != null && a.r !== a.r0 && !(s.r0 != null && s.reg !== s.r0)) rows.push(['Verschoben nach ' + a.reg.name, a.n, 'zuvor ' + regs[a.r0].name, 'm' + a.i]); });
+  scs.forEach(s => { if (s.r0 != null && s.reg !== s.r0) rows.push(['Szene verschoben nach ' + regs[s.reg].name, s.name, 'zuvor ' + regs[s.r0].name, 'c' + s.id]); if (s.n0 != null && s.de !== s.n0) rows.push(['Szene umbenannt', s.name, 'zuvor ' + s.n0, 'z' + s.id]); });
+  art.forEach(a => { if (a.gx) rows.push(['Eigenes Genre', a.n, a.gx.join(', '), 'n' + a.i]); }); trk.forEach(t => { if (t.gx) rows.push(['Eigenes Genre (Song)', t.n, t.gx.join(', '), 'q' + t.i]); });
   let h = '<div class="sect"><h3>Korrekturen</h3></div><div class="muted hid-intro">Fehler, die du über „Fehler melden“ in der Detailansicht eines Artists oder Songs korrigierst, gelten sofort auf dieser Karte und bleiben im Browser gespeichert. Hier kannst du sie zurücknehmen.</div>';
   h += rows.length ? rows.map(r => '<div class="hid-row"><div class="hid-t"><span class="hid-k">' + esc(r[0]) + '</span><b>' + esc(r[1]) + '</b>' + (r[2] ? '<small>' + esc(r[2]) + '</small>' : '') + '</div><button class="btn hid-b" data-fix="undo:' + r[3] + '">Rückgängig</button></div>').join('') : '<div class="muted hid-none">Noch keine Korrekturen.</div>';
   if (FXS.rep.length) h += '<div class="btns"><button class="btn" data-fix="copyrep">Meldungen kopieren (' + FXS.rep.length + ')</button></div>';
@@ -4697,7 +4834,7 @@ function applyFont() {
 }
 const REACT = {
   theme: 'theme', font: 'font', fontScale: 'draw', labelDensity: 'draw', regionLabels: 'draw', regionSize: 'draw', sceneLabels: 'draw', stars: 'draw', glowAmt: 'glow',
-  view: 'view', objs: 'view', metric: 'metric', timeMode: 'time', sizeCurve: 'layout', artScale: 'layout', songScale: 'layout', spread: 'layout', moonScale: 'draw',
+  view: 'view', objs: 'view', rowDir: 'view', gridCols: 'view', gridRows: 'view', metric: 'metric', timeMode: 'time', sizeCurve: 'layout', artScale: 'layout', songScale: 'layout', spread: 'layout', moonScale: 'draw',
   colorMode: 'recolor', linkAmt: 'draw', rings: 'draw', followCam: 'none', animSpeed: 'none', topN: 'layout', minMin: 'layout', minStr: 'layout', perf: 'perf', who: 'who'
 };
 function setSetting(key, val, opts) {
@@ -4739,10 +4876,17 @@ function syncSettingsUI(skipPanel) {
 }
 const THEME_SW = {
   night: 'radial-gradient(circle at 35% 40%,#1a2240,#080a14 70%)', black: 'radial-gradient(circle at 35% 40%,#101016,#000 70%)',
-  paper: 'radial-gradient(circle at 35% 40%,#faf5ea,#e3dac4 80%)', ocean: 'radial-gradient(circle at 35% 40%,#14506a,#041823 75%)'
+  paper: 'radial-gradient(circle at 35% 40%,#faf5ea,#e3dac4 80%)', ocean: 'radial-gradient(circle at 35% 40%,#14506a,#041823 75%)',
+  forest: 'radial-gradient(circle at 35% 40%,#1a4030,#040a07 75%)',
+  dusk: 'radial-gradient(circle at 35% 40%,#3a2a66,#080614 75%)',
+  wine: 'radial-gradient(circle at 35% 40%,#4a1a2c,#0a0307 75%)',
+  ember: 'radial-gradient(circle at 35% 40%,#46301a,#090502 75%)',
+  slate: 'radial-gradient(circle at 35% 40%,#2c3540,#07090b 75%)',
+  sky: 'radial-gradient(circle at 35% 40%,#f2f8fd,#cfe0ee 80%)',
+  rose: 'radial-gradient(circle at 35% 40%,#fdf3f4,#ebd2d6 80%)'
 };
 const rowSeg = (key, label, opts, hint) => '<div class="set-row"><div class="lb">' + label + (hint ? '<small>' + hint + '</small>' : '') + '</div><div class="ctrl"><div class="seg sm" data-set="' + key + '">' + opts.map(o => '<button data-v="' + o[0] + '" class="' + (String(S[key]) === String(o[0]) ? 'on' : '') + '">' + o[1] + '</button>').join('') + '</div></div></div>';
-const FMT = { minMin: v => v + ' min', minStr: v => v + '×',  artScale: v => v.toFixed(2) + '×', songScale: v => v.toFixed(2) + '×', spread: v => v.toFixed(2) + '×', moonScale: v => Math.round(v * 100) + ' %', labelDensity: v => v.toFixed(1) + '×', regionSize: v => v.toFixed(1) + '×', fontScale: v => Math.round(v * 100) + ' %', linkAmt: v => v.toFixed(1) + '×', glowAmt: v => v.toFixed(1) + '×' };
+const FMT = { gridCols: v => v ? String(v) : 'Auto', gridRows: v => v ? String(v) : 'Auto', minMin: v => v + ' min', minStr: v => v + '×',  artScale: v => v.toFixed(2) + '×', songScale: v => v.toFixed(2) + '×', spread: v => v.toFixed(2) + '×', moonScale: v => Math.round(v * 100) + ' %', labelDensity: v => v.toFixed(1) + '×', regionSize: v => v.toFixed(1) + '×', fontScale: v => Math.round(v * 100) + ' %', linkAmt: v => v.toFixed(1) + '×', glowAmt: v => v.toFixed(1) + '×' };
 const rowRange = (key, label, min, max, step, hint) => '<div class="set-row"><div class="lb">' + label + (hint ? '<small>' + hint + '</small>' : '') + '</div><div class="ctrl"><input type="range" min="' + min + '" max="' + max + '" step="' + step + '" value="' + S[key] + '" data-range="' + key + '" aria-label="' + label + '"><span class="val" id="v-' + key + '">' + FMT[key](S[key]) + '</span></div></div>';
 const rowNum = (key, label, min, max, step, hint) => '<div class="set-row"><div class="lb">' + label + (hint ? '<small>' + hint + '</small>' : '') + '</div><div class="ctrl"><input type="range" min="' + min + '" max="' + max + '" step="' + step + '" value="' + Math.min(max, S[key]) + '" data-range="' + key + '" aria-label="' + label + '"><input class="num" type="number" inputmode="numeric" min="' + min + '" step="' + step + '" value="' + S[key] + '" data-num="' + key + '" aria-label="' + label + ' (Zahl eingeben)"></div></div>';
 const rowSwitch = (attr, key, on, label, hint) => '<div class="set-row"><div class="lb">' + label + (hint ? '<small>' + hint + '</small>' : '') + '</div><div class="ctrl"><label class="switch"><input type="checkbox" ' + attr + '="' + key + '"' + (on ? ' checked' : '') + ' aria-label="' + label + '"><span></span></label></div></div>';
@@ -4752,6 +4896,9 @@ function settingsHTML() {
   h += '<div class="sect"><h3>Ansicht</h3></div>'
     + rowSeg('view', 'Darstellung', [['map', 'Karte'], ['rows', 'Reihen'], ['spiral', 'Spirale']], 'Reihen und Spirale ordnen nach Größe, ohne Genre-Nähe.')
     + rowSeg('objs', 'Objekte (Reihen/Spirale)', [['artists', 'Artists'], ['songs', 'Songs']])
+    + rowSeg('rowDir', 'Anordnung der Reihen', [['h', 'Waagerecht'], ['v', 'Senkrecht']], 'Gilt für die Ansicht „Reihen“: Die Größten stehen zuerst, waagerecht Zeile für Zeile oder senkrecht Spalte für Spalte.')
+    + rowNum('gridCols', 'Spalten', 0, 40, 1, 'Anzahl pro Zeile (waagerecht). 0 = automatisch.')
+    + rowNum('gridRows', 'Zeilen', 0, 80, 1, 'Anzahl pro Spalte (senkrecht). 0 = automatisch.')
     + rowSeg('metric', 'Größe nach', [['min', 'Hörzeit'], ['str', 'Streams']], 'Die Kreise wachsen und schrumpfen animiert.')
     + rowSeg('timeMode', 'Zeitraum-Modus', [['dynamic', 'Dynamisch'], ['fixed', 'Fest']], 'Dynamisch: Die Karte ordnet sich neu an und zeigt nur, was im Zeitraum gehört wurde. Fest: Alle Plätze bleiben, nur die Größe ändert sich.')
     + rowSwitch('data-sw', 'followCam', S.followCam, 'Kamera folgt der Karte', 'Passt den Ausschnitt an, wenn sich die Karte stark verändert.')
@@ -4891,8 +5038,8 @@ dbody.addEventListener('click', e => {
    ===================================================================== */
 const PP_KEY = 'kk-presets';
 const PP_SKIP = ['perf'];
-const PP_RANGE = { fontScale: [.8, 1.5], labelDensity: [.4, 2], regionSize: [.5, 1.8], glowAmt: [0, 2], artScale: [.5, 2], songScale: [.5, 2.5], spread: [.7, 2], moonScale: [.6, 1], linkAmt: [0, 2], animSpeed: [.6, 1.8], topN: [0, 100000], minMin: [0, 10000], minStr: [0, 10000] };
-const PP_ENUM = { sizeCurve: ['soft', 'sqrt', 'strong'], metric: ['min', 'str'], timeMode: ['dynamic', 'fixed'], colorMode: ['region', 'heat', 'new'] };
+const PP_RANGE = { fontScale: [.8, 1.5], labelDensity: [.4, 2], regionSize: [.5, 1.8], glowAmt: [0, 2], artScale: [.5, 2], songScale: [.5, 2.5], spread: [.7, 2], moonScale: [.6, 1], linkAmt: [0, 2], animSpeed: [.6, 1.8], gridCols: [0, 40], gridRows: [0, 80], topN: [0, 100000], minMin: [0, 10000], minStr: [0, 10000] };
+const PP_ENUM = { sizeCurve: ['soft', 'sqrt', 'strong'], metric: ['min', 'str'], timeMode: ['dynamic', 'fixed'], rowDir: ['h', 'v'], colorMode: ['region', 'heat', 'new'] };
 function ppBuilt() {
   const look = ['theme', 'font', 'fontScale', 'labelDensity', 'regionLabels', 'regionSize', 'sceneLabels', 'stars', 'glowAmt', 'sizeCurve', 'artScale', 'songScale', 'spread', 'moonScale', 'colorMode', 'linkAmt', 'rings', 'topN'];
   const std = {}; look.concat(['metric', 'timeMode', 'followCam', 'animSpeed', 'minMin', 'minStr']).forEach(k => { std[k] = DEF.S[k]; });
@@ -5203,7 +5350,7 @@ new ResizeObserver(() => { mmResize(); }).observe($('minimap'));
   $('minimap').classList.toggle('hidden', !UI.minimap); $('legend').classList.toggle('hidden', !UI.legend);
   mmResize(); placeMinimap();
   await loadAtlas(); atlasReady = true;
-  cmpInit(); rcInit(); if (CMP) { $('t-live').remove(); if ($('t-sync')) $('t-sync').remove(); } else if (syncOK()) setTimeout(() => liveSync(false), 2500);
+  cmpInit(); rcInit(); if (CMP) { $('t-live').remove(); if ($('t-sync')) $('t-sync').remove(); } else if (syncOK()) { if (liveWanted()) setTimeout(() => { if (!LIVE.on) setLive(true, true); }, 1200); else setTimeout(() => liveSync(false), 2500); }
   if (HUD.src === 'spotify' && $('t-sync')) $('t-sync').remove();
   recolor(); recompute(); rankings(); renderHud(); renderPresets(); renderDrawer(); tlResize(); onRangeChange();
   applyLayout({ instant: true, fit: false }); fitAll(false); syncSettingsUI(); mmResize();
@@ -5212,7 +5359,7 @@ new ResizeObserver(() => { mmResize(); }).observe($('minimap'));
   setTimeout(() => { $('loading').style.display = 'none'; }, 1100);
   try { if (!localStorage.getItem('klangkarte-help')) { $('help').classList.add('show'); localStorage.setItem('klangkarte-help', '1'); } } catch (e) { }
 })();
-window.__km = { prof: profileDraw, tick: n => { let c = 0; for (let i = 0; i < n; i++) { stepAnim(16, performance.now() + i * 16); c++; if (!animOn && !solver) break; } return c; }, get solving() { return !!solver; }, S, UI, show, setSetting, applyLayout, get PATH() { return PATH; }, bench: n => { const t = performance.now(); for (let i = 0; i < (n || 20); i++) draw(); return (performance.now() - t) / (n || 20); }, cam, art, trk, alb, regs, scs, selectItem, setRange, fitAll, goto_, focusOn, tourStart, get sel() { return sel; }, frameStats, RC, rcPreset, fixDev: { FX, FXS, isHidA, isHidT, fxMoveTo, fxUndo }, vid: { stopFly: () => { fly = null; inertia = null; }, get LB() { return LB; }, hopInfo, tagName, LK, lkSet, lkRun, lkReset, clearSel, dijkstra, setClean, requestDraw, computeFocus, get LINKV() { return LINKV; }, get rA() { return rA; }, get rB() { return rB; }, get ND() { return ND; }, HUD, dayDate }, rcDev: { rcTidy, rcReturnArtist, rcSetGroup, rcDropBegin, rcDock, rcGatherStrays, rcSnapshot, rcHandTarget, rcSimFinish, rcSimStop, robustCenter, rcFlowStep, rcGridInit, rcSetMass, RPH, RSIM, rcSimInit, rcSimRun, rcSimStep, rcApply, rcGeo, rcPositions, rcResetPositions, rcContacts, rcCentroids, rcPushGS, rcPushOut, rcCarry, rcIter },mmDbg: () => ({ mmW, mmH, mmDirty, mmw: mm.width, base: mmBase && mmBase.width, frameN, uimm: UI.minimap, glowW: glow.width }), setWho, CMP, live: { LIVE, liveSet, setLive }, pdf: exportPDF, PDFX, lk: { LK, findRoutes, hopInfo, hopLines, graph, dijkstra, get LINKV() { return LINKV; }, set: lkSet, run: lkRun, rand: lkRand } };
+window.__km = { prof: profileDraw, tick: n => { let c = 0; for (let i = 0; i < n; i++) { stepAnim(16, performance.now() + i * 16); c++; if (!animOn && !solver) break; } return c; }, get solving() { return !!solver; }, S, UI, show, setSetting, applyLayout, get PATH() { return PATH; }, bench: n => { const t = performance.now(); for (let i = 0; i < (n || 20); i++) draw(); return (performance.now() - t) / (n || 20); }, cam, art, trk, alb, regs, scs, selectItem, setRange, fitAll, goto_, focusOn, tourStart, get sel() { return sel; }, frameStats, RC, rcPreset, fixDev: { FX, FXS, isHidA, isHidT, fxMoveTo, fxUndo }, hideDev: { HID, hideSet, hideClear, hideNote }, vid: { stopFly: () => { fly = null; inertia = null; }, get LB() { return LB; }, hopInfo, tagName, LK, lkSet, lkRun, lkReset, clearSel, dijkstra, setClean, requestDraw, computeFocus, get LINKV() { return LINKV; }, get rA() { return rA; }, get rB() { return rB; }, get ND() { return ND; }, HUD, dayDate }, rcDev: { rcTidy, rcReturnArtist, rcSetGroup, rcDropBegin, rcDock, rcGatherStrays, rcSnapshot, rcHandTarget, rcSimFinish, rcSimStop, robustCenter, rcFlowStep, rcGridInit, rcSetMass, RPH, RSIM, rcSimInit, rcSimRun, rcSimStep, rcApply, rcGeo, rcPositions, rcResetPositions, rcContacts, rcCentroids, rcPushGS, rcPushOut, rcCarry, rcIter },mmDbg: () => ({ mmW, mmH, mmDirty, mmw: mm.width, base: mmBase && mmBase.width, frameN, uimm: UI.minimap, glowW: glow.width }), setWho, CMP, live: { LIVE, liveSet, setLive }, pdf: exportPDF, PDFX, lk: { LK, findRoutes, hopInfo, hopLines, graph, dijkstra, get LINKV() { return LINKV; }, set: lkSet, run: lkRun, rand: lkRand } };
 
 })();
 </script>
